@@ -175,6 +175,9 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="INICIAR"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
@@ -210,6 +213,9 @@
                   <Image iconType="3" name="/Img/facebook.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Siguenos en "/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="horizontalTextPosition" type="int" value="2"/>
               </Properties>
             </Component>
@@ -248,6 +254,9 @@
                   <Image iconType="3" name="/Img/instagram.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Siguenos en"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="horizontalTextPosition" type="int" value="2"/>
               </Properties>
             </Component>
