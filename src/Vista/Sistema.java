@@ -6,7 +6,9 @@ package Vista;
 
 import Modelo.Cliente;
 import Modelo.ClienteDao;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,7 +17,7 @@ import javax.swing.JOptionPane;
 public class Sistema extends javax.swing.JFrame {
     Cliente cl = new Cliente();
     ClienteDao clDao = new ClienteDao();
-    
+    DefaultTableModel modelo = new DefaultTableModel();
     
     /**
      * Creates new form Sistema
@@ -23,6 +25,35 @@ public class Sistema extends javax.swing.JFrame {
     public Sistema() {
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+    
+    //Metodo para cargar tabla clientes
+    public void listarClientes(){
+        List<Cliente> listarCl = clDao.listarClientes();    //metodo de ClientaDao
+        modelo = (DefaultTableModel) tblCliente.getModel();
+        Object[] obj = new Object[7];
+        
+        for(int i = 0; i < listarCl.size(); i++){
+            obj[0] = listarCl.get(i).getId_cliente();
+            obj[1] = listarCl.get(i).getDni_cuit();
+            obj[2] = listarCl.get(i).getNombre();
+            obj[3] = listarCl.get(i).getDireccion();
+            obj[4] = listarCl.get(i).getTelefono();
+            obj[5] = listarCl.get(i).getCorreo();
+            obj[6] = listarCl.get(i).getRazon_social();
+            
+            modelo.addRow(obj);
+        }
+        
+        tblCliente.setModel(modelo);
+    }
+    
+    //Metodo para limpiar la tabla clientes
+    public void limpiarTablaClientes(){
+        for(int i = 0; i < modelo.getRowCount(); i++){
+            modelo.removeRow(i);
+            i = i - 1;
+        }
     }
 
     /**
@@ -167,6 +198,11 @@ public class Sistema extends javax.swing.JFrame {
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Clientes.png"))); // NOI18N
         jButton2.setText("CLIENTES");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(255, 255, 255));
         jButton3.setForeground(new java.awt.Color(0, 0, 0));
@@ -238,6 +274,11 @@ public class Sistema extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 910, 140));
 
         jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel3.setText("Codigo");
@@ -434,7 +475,7 @@ public class Sistema extends javax.swing.JFrame {
                         .addGap(20, 20, 20))))
         );
 
-        jTabbedPane1.addTab("tab1", jPanel2);
+        jTabbedPane1.addTab("NUEVA VENTA", jPanel2);
 
         jLabel12.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel12.setText("DNI / CUIT");
@@ -471,17 +512,18 @@ public class Sistema extends javax.swing.JFrame {
 
             },
             new String [] {
-                "DNI / CUIT", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "RAZON SOCIAL"
+                "ID_CLIENTE", "DNI / CUIT", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "RAZON SOCIAL"
             }
         ));
         jScrollPane2.setViewportView(tblCliente);
         if (tblCliente.getColumnModel().getColumnCount() > 0) {
-            tblCliente.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tblCliente.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblCliente.getColumnModel().getColumn(2).setPreferredWidth(50);
-            tblCliente.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tblCliente.getColumnModel().getColumn(4).setPreferredWidth(50);
+            tblCliente.getColumnModel().getColumn(0).setPreferredWidth(40);
+            tblCliente.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tblCliente.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tblCliente.getColumnModel().getColumn(3).setPreferredWidth(120);
+            tblCliente.getColumnModel().getColumn(4).setPreferredWidth(40);
             tblCliente.getColumnModel().getColumn(5).setPreferredWidth(150);
+            tblCliente.getColumnModel().getColumn(6).setPreferredWidth(80);
         }
 
         btnGuardarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
@@ -523,28 +565,28 @@ public class Sistema extends javax.swing.JFrame {
                         .addComponent(btnNuevoCliente))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addGap(35, 35, 35)
+                            .addGap(32, 32, 32)
                             .addComponent(jLabel12)
-                            .addGap(81, 81, 81)
+                            .addGap(95, 95, 95)
                             .addComponent(jLabel13)
-                            .addGap(118, 118, 118)
-                            .addComponent(jLabel14)
-                            .addGap(101, 101, 101)
-                            .addComponent(jLabel15)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel14)
+                            .addGap(88, 88, 88)
+                            .addComponent(jLabel15)
+                            .addGap(63, 63, 63)
                             .addComponent(jLabel16)
-                            .addGap(71, 71, 71)
+                            .addGap(57, 57, 57)
                             .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(3, 3, 3)
                             .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(txtDniCuitCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDniCuitCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(txtDireccionCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(txtTelefonoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTelefonoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(txtCorreoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
@@ -586,7 +628,7 @@ public class Sistema extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTabbedPane1.addTab("tab2", jPanel3);
+        jTabbedPane1.addTab("CLIENTES", jPanel3);
 
         jLabel18.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel18.setText("DNI / CUIT");
@@ -733,7 +775,7 @@ public class Sistema extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTabbedPane1.addTab("tab3", jPanel4);
+        jTabbedPane1.addTab("PROVEEDORES", jPanel4);
 
         jLabel24.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel24.setText("Codigo");
@@ -897,7 +939,7 @@ public class Sistema extends javax.swing.JFrame {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTabbedPane1.addTab("tab4", jPanel5);
+        jTabbedPane1.addTab("PRODUCTOS", jPanel5);
 
         tblVentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -950,7 +992,7 @@ public class Sistema extends javax.swing.JFrame {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTabbedPane1.addTab("tab5", jPanel6);
+        jTabbedPane1.addTab("TODAS LAS VENTAS", jPanel6);
 
         jLabel30.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel30.setText("CUIT");
@@ -1071,7 +1113,7 @@ public class Sistema extends javax.swing.JFrame {
                 .addContainerGap(53, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab6", jPanel7);
+        jTabbedPane1.addTab("CONFIGURACION", jPanel7);
 
         getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 910, 450));
 
@@ -1088,19 +1130,36 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
         if(!"".equals(txtDniCuitCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtDireccionCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtCorreoCliente.getText()) || !"".equals(txtRazonCliente.getText())){
-            cl.setDni_cuit(Integer.parseInt(txtDniCuitCliente.getText()));  //Convertimos a entero
+            try{
+            cl.setDni_cuit(Long.parseLong(txtDniCuitCliente.getText()));  //Convertimos a entero
             cl.setNombre(txtNombreCliente.getText());
             cl.setDireccion(txtDireccionCliente.getText());
-            cl.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
+            cl.setTelefono(Long.parseLong(txtTelefonoCliente.getText()));
             cl.setCorreo(txtCorreoCliente.getText());
             cl.setRazon_social(txtRazonCliente.getText());
             
             clDao.registrarCliente(cl);
              JOptionPane.showMessageDialog(null, "Cliente registrado con exito");
+             limpiarTablaClientes();
+             listarClientes();
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(null, e.toString());
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor completa todos los campos para el registro");
         }
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        limpiarTablaClientes();
+        listarClientes();
+        jTabbedPane1.setSelectedIndex(1);   //muestra el tab de cliente
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        limpiarTablaClientes();
+        listarClientes();
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     /**
      * @param args the command line arguments

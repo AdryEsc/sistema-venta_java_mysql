@@ -41,7 +41,7 @@ public class Cliente {
         return dni_cuit;
     }
 
-    public void setDni_cuit(int dni_cuit) {
+    public void setDni_cuit(long dni_cuit) {
         this.dni_cuit = dni_cuit;
     }
 
@@ -65,7 +65,7 @@ public class Cliente {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 
