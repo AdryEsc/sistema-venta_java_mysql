@@ -15,6 +15,7 @@ public class ClienteDao {
     PreparedStatement ps;
     ResultSet rs;
     
+    //Inserta cliente en el base de datos
     public boolean registrarCliente(Cliente cl){
         String consultaSQL = "INSERT INTO clientes (dni_cuit, nombre, direccion, telefono, correo, razon_social) VALUES (?,?,?,?,?,?)";
         
@@ -41,15 +42,16 @@ public class ClienteDao {
         } finally {
             try {
                 conn.close();
-            } catch (SQLException e){
-                System.out.println(e.toString());
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
             }
         }
     }
     
+    //Devuelve lista de clientes de la DB
     public List listarClientes(){
         List<Cliente> listaCliente = new ArrayList();
-        String consultaSQL = "SELECT * FROM clientes";
+        String consultaSQL = "SELECT * FROM clientes WHERE estado = 1";
         
         try {
             conn = conex.getConnection();
@@ -75,8 +77,70 @@ public class ClienteDao {
             
         } catch (SQLException e) {
             System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
         }
         return listaCliente;
-    }   
+    }
+    
+    //Baja logica del cliente, cambiando su estado a 0
+    public boolean eliminarCliente(int id){
+        //String consultaSQL = "DELETE clientes WHERE id_cliente = ?";
+        String consultaSQL = "UPDATE clientes SET estado = 0 WHERE id_cliente = ?";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            ps.setInt(1, id);   //pasamos el valor al ? de la consulta
+            ps.execute();
+            
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        
+    }
+    
+    //Actualiza cliente
+    public boolean actualizarCliente(Cliente cl){
+        String consultaSQL = "UPDATE clientes SET dni_cuit = ?, nombre = ?, direccion = ?, telefono = ?, correo = ?, razon_social = ? WHERE id_cliente = ?";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            ps.setLong(1, cl.getDni_cuit());   //pasamos el valor al ? de la consulta
+            ps.setString(2, cl.getNombre());
+            ps.setString(3, cl.getDireccion());
+            ps.setLong(4, cl.getTelefono());
+            ps.setString(5, cl.getCorreo());
+            ps.setString(6, cl.getRazon_social());
+            ps.setInt(7, cl.getId_cliente());   //pasamos el id 
+            
+            ps.execute();
+            
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+    
+    }
     
 }

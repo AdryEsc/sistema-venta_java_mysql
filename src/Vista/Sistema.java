@@ -25,6 +25,7 @@ public class Sistema extends javax.swing.JFrame {
     public Sistema() {
         initComponents();
         this.setLocationRelativeTo(null);
+        txtIdCliente.setVisible(false);
     }
     
     //Metodo para cargar tabla clientes
@@ -54,6 +55,16 @@ public class Sistema extends javax.swing.JFrame {
             modelo.removeRow(i);
             i = i - 1;
         }
+    }
+    
+    public void limpiarCampos(){
+        txtIdCliente.setText("");
+        txtDniCuitCliente.setText("");
+        txtNombreCliente.setText("");
+        txtDireccionCliente.setText("");
+        txtTelefonoCliente.setText("");
+        txtCorreoCliente.setText("");
+        txtRazonCliente.setText("");
     }
 
     /**
@@ -228,7 +239,7 @@ public class Sistema extends javax.swing.JFrame {
         jButton6.setText("CONFIG.");
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/LOGO_FENIX.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/logo_espectro.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -515,6 +526,11 @@ public class Sistema extends javax.swing.JFrame {
                 "ID_CLIENTE", "DNI / CUIT", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "RAZON SOCIAL"
             }
         ));
+        tblCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClienteMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblCliente);
         if (tblCliente.getColumnModel().getColumnCount() > 0) {
             tblCliente.getColumnModel().getColumn(0).setPreferredWidth(40);
@@ -538,14 +554,29 @@ public class Sistema extends javax.swing.JFrame {
         btnActualizarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarCliente.setText("ACTUALIZAR");
         btnActualizarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnActualizarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarClienteActionPerformed(evt);
+            }
+        });
 
         btnEliminarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarCliente.setText("ELIMINAR");
         btnEliminarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarClienteActionPerformed(evt);
+            }
+        });
 
         btnNuevoCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoCliente.setText("NUEVO");
         btnNuevoCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoClienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1131,7 +1162,7 @@ public class Sistema extends javax.swing.JFrame {
     private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
         if(!"".equals(txtDniCuitCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtDireccionCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtCorreoCliente.getText()) || !"".equals(txtRazonCliente.getText())){
             try{
-            cl.setDni_cuit(Long.parseLong(txtDniCuitCliente.getText()));  //Convertimos a entero
+            cl.setDni_cuit(Long.parseLong(txtDniCuitCliente.getText()));  //Convertimos a long
             cl.setNombre(txtNombreCliente.getText());
             cl.setDireccion(txtDireccionCliente.getText());
             cl.setTelefono(Long.parseLong(txtTelefonoCliente.getText()));
@@ -1142,6 +1173,7 @@ public class Sistema extends javax.swing.JFrame {
              JOptionPane.showMessageDialog(null, "Cliente registrado con exito");
              limpiarTablaClientes();
              listarClientes();
+             limpiarCampos();
             } catch (Exception e){
                 JOptionPane.showMessageDialog(null, e.toString());
             }
@@ -1160,6 +1192,62 @@ public class Sistema extends javax.swing.JFrame {
         limpiarTablaClientes();
         listarClientes();
     }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void tblClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClienteMouseClicked
+        int fila = tblCliente.rowAtPoint(evt.getPoint());
+        
+        txtIdCliente.setText(tblCliente.getValueAt(fila, 0).toString());
+        txtDniCuitCliente.setText(tblCliente.getValueAt(fila, 1).toString());
+        txtNombreCliente.setText(tblCliente.getValueAt(fila, 2).toString());
+        txtDireccionCliente.setText(tblCliente.getValueAt(fila, 3).toString());
+        txtTelefonoCliente.setText(tblCliente.getValueAt(fila, 4).toString());
+        txtCorreoCliente.setText(tblCliente.getValueAt(fila, 5).toString());
+        txtRazonCliente.setText(tblCliente.getValueAt(fila, 6).toString());
+    }//GEN-LAST:event_tblClienteMouseClicked
+
+    private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
+        if(!"".equals(txtIdCliente.getText())){ //Si el txtId es distinto de vacio
+            int pregunta = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el cliente?");
+            if(pregunta == 0){
+                int idCliente = Integer.parseInt(txtIdCliente.getText());
+                clDao.eliminarCliente(idCliente);
+                JOptionPane.showMessageDialog(null, "Cliente eliminado con exito");
+                limpiarTablaClientes();
+                listarClientes();
+                limpiarCampos();
+            }
+        }
+    }//GEN-LAST:event_btnEliminarClienteActionPerformed
+
+    private void btnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClienteActionPerformed
+        if("".equals(txtIdCliente.getText())){
+            JOptionPane.showMessageDialog(null, "Seleccione en la tabla el cliente a eliminar");
+        } else{
+            if(!"".equals(txtDniCuitCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtDireccionCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtCorreoCliente.getText()) || !"".equals(txtRazonCliente.getText())){
+                cl.setDni_cuit(Long.parseLong(txtDniCuitCliente.getText()));  //Convertimos a long
+                cl.setNombre(txtNombreCliente.getText());
+                cl.setDireccion(txtDireccionCliente.getText());
+                cl.setTelefono(Long.parseLong(txtTelefonoCliente.getText()));
+                cl.setCorreo(txtCorreoCliente.getText());
+                cl.setRazon_social(txtRazonCliente.getText());
+                cl.setId_cliente(Integer.parseInt(txtIdCliente.getText())); //le pasamos el id para la consulta
+                
+                clDao.actualizarCliente(cl);
+                JOptionPane.showMessageDialog(null, "Cliente actualizado con exito");
+                limpiarTablaClientes();
+                listarClientes();
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Para actualizar deben estar todos los campos cargados");
+            }
+        }
+    }//GEN-LAST:event_btnActualizarClienteActionPerformed
+
+    private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
+        limpiarTablaClientes();
+        listarClientes();
+        limpiarCampos();
+    }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     /**
      * @param args the command line arguments
