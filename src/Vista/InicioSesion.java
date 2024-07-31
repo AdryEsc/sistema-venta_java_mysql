@@ -4,7 +4,7 @@
  */
 package Vista;
 
-import Modelo.Login;
+import Entidad.Login;
 import Modelo.LoginDao;
 import javax.swing.JOptionPane;
 

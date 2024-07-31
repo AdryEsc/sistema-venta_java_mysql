@@ -1,7 +1,7 @@
 
 package Modelo;
 
-import Entidad.Cliente;
+import Entidad.Proveedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,28 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class ClienteDao {
+
+public class ProveedorDao {
     Connection conn;
     Conexion conex = new Conexion();
     PreparedStatement ps;
     ResultSet rs;
     
-    //Inserta cliente en el base de datos
-    public boolean registrarCliente(Cliente cl){
-        String consultaSQL = "INSERT INTO clientes (dni_cuit, nombre, direccion, telefono, correo, razon_social) VALUES (?,?,?,?,?,?)";
-        
+    public boolean registrarProveedor(Proveedor prov){
+        String consultaSQL = "INSERT INTO proveedores (dni_cuit, nombre, direccion, telefono, correo, razon_social) VALUES (?,?,?,?,?,?)";
+    
         try {
             conn = conex.getConnection();
             ps = conn.prepareStatement(consultaSQL);
             
             /* Pasamos los valores (?) en la consulta */ 
             //ps.setInt(0, cl.getId_cliente());  //El indice 0 es el id_cliente de la DB
-            ps.setLong(1, cl.getDni_cuit());
-            ps.setString(2, cl.getNombre());
-            ps.setString(3, cl.getDireccion());
-            ps.setLong(4, cl.getTelefono());
-            ps.setString(5, cl.getCorreo());
-            ps.setString(6, cl.getRazon_social());
+            ps.setLong(1, prov.getDni_cuit());
+            ps.setString(2, prov.getNombre());
+            ps.setString(3, prov.getDireccion());
+            ps.setLong(4, prov.getTelefono());
+            ps.setString(5, prov.getCorreo());
+            ps.setString(6, prov.getRazon_social());
             
             //Ejecutamos consulta
             ps.execute();
@@ -47,12 +47,14 @@ public class ClienteDao {
                 System.out.println(ex.toString());
             }
         }
+
+        
     }
     
-    //Devuelve lista de clientes de la DB
-    public List listarClientes(){
-        List<Cliente> listaCliente = new ArrayList();
-        String consultaSQL = "SELECT * FROM clientes WHERE estado = 1";
+    //Devuelve lista de proveedores de la DB
+    public List listarProveedores(){
+        List<Proveedor> listaProveedor = new ArrayList();
+        String consultaSQL = "SELECT * FROM proveedores WHERE estado = 1";
         
         try {
             conn = conex.getConnection();
@@ -61,19 +63,19 @@ public class ClienteDao {
             
             //recorremos el resultset
             while(rs.next()){
-                Cliente cliente = new Cliente();
+                Proveedor proveedor = new Proveedor();
                 
-                //cargamos el objeto cliente
-                cliente.setId_cliente(rs.getInt("id_cliente"));
-                cliente.setDni_cuit(rs.getLong("dni_cuit"));
-                cliente.setNombre(rs.getString("nombre"));
-                cliente.setDireccion(rs.getString("direccion"));
-                cliente.setTelefono(rs.getLong("telefono"));
-                cliente.setCorreo(rs.getString("correo"));
-                cliente.setRazon_social(rs.getString("razon_social"));
+                //cargamos el objeto proveedor
+                proveedor.setId_proveedor(rs.getInt("id_proveedor"));
+                proveedor.setDni_cuit(rs.getLong("dni_cuit"));
+                proveedor.setNombre(rs.getString("nombre"));
+                proveedor.setDireccion(rs.getString("direccion"));
+                proveedor.setTelefono(rs.getLong("telefono"));
+                proveedor.setCorreo(rs.getString("correo"));
+                proveedor.setRazon_social(rs.getString("razon_social"));
                 
-                //Agregamos cliente a la lista
-                listaCliente.add(cliente);
+                //Agregamos proveedor a la lista
+                listaProveedor.add(proveedor);
             }
             
         } catch (SQLException e) {
@@ -85,13 +87,13 @@ public class ClienteDao {
                 System.out.println(ex.toString());
             }
         }
-        return listaCliente;
+        return listaProveedor;
     }
     
-    //Baja logica del cliente, cambiando su estado a 0
-    public boolean eliminarCliente(int id){
+    //Baja logica del proveedor, cambiando su estado a 0
+    public boolean eliminarProveedor(int id){
         //String consultaSQL = "DELETE clientes WHERE id_cliente = ?";
-        String consultaSQL = "UPDATE clientes SET estado = 0 WHERE id_cliente = ?";
+        String consultaSQL = "UPDATE proveedores SET estado = 0 WHERE id_proveedor = ?";
         
         try {
             conn = conex.getConnection();
@@ -114,19 +116,19 @@ public class ClienteDao {
     }
     
     //Actualiza cliente
-    public boolean actualizarCliente(Cliente cl){
-        String consultaSQL = "UPDATE clientes SET dni_cuit = ?, nombre = ?, direccion = ?, telefono = ?, correo = ?, razon_social = ? WHERE id_cliente = ?";
+    public boolean actualizarProveedor(Proveedor prov){
+        String consultaSQL = "UPDATE proveedores SET dni_cuit = ?, nombre = ?, direccion = ?, telefono = ?, correo = ?, razon_social = ? WHERE id_proveedor = ?";
         
         try {
             conn = conex.getConnection();
             ps = conn.prepareStatement(consultaSQL);
-            ps.setLong(1, cl.getDni_cuit());   //pasamos el valor al ? de la consulta
-            ps.setString(2, cl.getNombre());
-            ps.setString(3, cl.getDireccion());
-            ps.setLong(4, cl.getTelefono());
-            ps.setString(5, cl.getCorreo());
-            ps.setString(6, cl.getRazon_social());
-            ps.setInt(7, cl.getId_cliente());   //pasamos el id 
+            ps.setLong(1, prov.getDni_cuit());   //pasamos el valor al ? de la consulta
+            ps.setString(2, prov.getNombre());
+            ps.setString(3, prov.getDireccion());
+            ps.setLong(4, prov.getTelefono());
+            ps.setString(5, prov.getCorreo());
+            ps.setString(6, prov.getRazon_social());
+            ps.setInt(7, prov.getId_proveedor());   //pasamos el id 
             
             ps.execute();
             
@@ -143,5 +145,4 @@ public class ClienteDao {
         }
     
     }
-    
 }

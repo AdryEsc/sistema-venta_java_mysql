@@ -1,6 +1,7 @@
 
 package Modelo;
 
+import Entidad.Login;
 import java.sql.SQLException;
 
 import java.sql.Connection;

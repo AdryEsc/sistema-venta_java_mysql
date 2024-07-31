@@ -4,8 +4,10 @@
  */
 package Vista;
 
-import Modelo.Cliente;
+import Entidad.Cliente;
+import Entidad.Proveedor;
 import Modelo.ClienteDao;
+import Modelo.ProveedorDao;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
 public class Sistema extends javax.swing.JFrame {
     Cliente cl = new Cliente();
     ClienteDao clDao = new ClienteDao();
+    Proveedor prov = new Proveedor();
+    ProveedorDao provDao = new ProveedorDao();
     DefaultTableModel modelo = new DefaultTableModel();
     
     /**
@@ -26,6 +30,7 @@ public class Sistema extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         txtIdCliente.setVisible(false);
+        txtIdProveedor.setVisible(false);
     }
     
     //Metodo para cargar tabla clientes
@@ -49,8 +54,29 @@ public class Sistema extends javax.swing.JFrame {
         tblCliente.setModel(modelo);
     }
     
+    public void listarProveedores(){
+        List<Proveedor> listarProv = provDao.listarProveedores();    //metodo de ClientaDao
+        modelo = (DefaultTableModel) tblProveedor.getModel();
+        Object[] obj = new Object[7];
+        
+        for(int i = 0; i < listarProv.size(); i++){
+            obj[0] = listarProv.get(i).getId_proveedor();
+            obj[1] = listarProv.get(i).getDni_cuit();
+            obj[2] = listarProv.get(i).getNombre();
+            obj[3] = listarProv.get(i).getDireccion();
+            obj[4] = listarProv.get(i).getTelefono();
+            obj[5] = listarProv.get(i).getCorreo();
+            obj[6] = listarProv.get(i).getRazon_social();
+            
+            modelo.addRow(obj);
+        }
+        
+        tblProveedor.setModel(modelo);
+    }
+
+    
     //Metodo para limpiar la tabla clientes
-    public void limpiarTablaClientes(){
+    public void limpiarTabla(){
         for(int i = 0; i < modelo.getRowCount(); i++){
             modelo.removeRow(i);
             i = i - 1;
@@ -65,6 +91,15 @@ public class Sistema extends javax.swing.JFrame {
         txtTelefonoCliente.setText("");
         txtCorreoCliente.setText("");
         txtRazonCliente.setText("");
+        
+        txtIdProveedor.setText("");
+        txtDniCuitProveedor.setText("");
+        txtNombreProveedor.setText("");
+        txtDireccionProveedor.setText("");
+        txtTelefonoProveedor.setText("");
+        txtCorreoProveedor.setText("");
+        txtRazonProveedor.setText("");
+
     }
 
     /**
@@ -220,6 +255,11 @@ public class Sistema extends javax.swing.JFrame {
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/proveedor.png"))); // NOI18N
         jButton3.setText("PROVEEDORES");
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(255, 255, 255));
         jButton4.setForeground(new java.awt.Color(0, 0, 0));
@@ -694,35 +734,61 @@ public class Sistema extends javax.swing.JFrame {
         btnNuevoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoProveedor.setText("NUEVO");
         btnNuevoProveedor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevoProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoProveedorActionPerformed(evt);
+            }
+        });
 
         btnEliminarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarProveedor.setText("ELIMINAR");
         btnEliminarProveedor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProveedorActionPerformed(evt);
+            }
+        });
 
         btnActualizarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarProveedor.setText("ACTUALIZAR");
         btnActualizarProveedor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnActualizarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarProveedorActionPerformed(evt);
+            }
+        });
 
         btnGuardarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarProveedor.setText("GUARDAR");
         btnGuardarProveedor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGuardarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProveedorActionPerformed(evt);
+            }
+        });
 
         tblProveedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "DNI / CUIT", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "RAZON SOCIAL"
+                "ID_PROVEEDOR", "DNI / CUIT", "NOMBRE", "DIRECCION", "TELEFONO", "CORREO", "RAZON SOCIAL"
             }
         ));
+        tblProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProveedorMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblProveedor);
         if (tblProveedor.getColumnModel().getColumnCount() > 0) {
-            tblProveedor.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tblProveedor.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblProveedor.getColumnModel().getColumn(2).setPreferredWidth(50);
-            tblProveedor.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tblProveedor.getColumnModel().getColumn(4).setPreferredWidth(50);
+            tblProveedor.getColumnModel().getColumn(0).setPreferredWidth(40);
+            tblProveedor.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tblProveedor.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tblProveedor.getColumnModel().getColumn(3).setPreferredWidth(120);
+            tblProveedor.getColumnModel().getColumn(4).setPreferredWidth(40);
             tblProveedor.getColumnModel().getColumn(5).setPreferredWidth(150);
+            tblProveedor.getColumnModel().getColumn(6).setPreferredWidth(80);
         }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -1171,7 +1237,7 @@ public class Sistema extends javax.swing.JFrame {
             
             clDao.registrarCliente(cl);
              JOptionPane.showMessageDialog(null, "Cliente registrado con exito");
-             limpiarTablaClientes();
+             limpiarTabla();
              listarClientes();
              limpiarCampos();
             } catch (Exception e){
@@ -1183,14 +1249,13 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        limpiarTablaClientes();
+        limpiarTabla();
         listarClientes();
         jTabbedPane1.setSelectedIndex(1);   //muestra el tab de cliente
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        limpiarTablaClientes();
-        listarClientes();
+       
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void tblClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClienteMouseClicked
@@ -1212,7 +1277,7 @@ public class Sistema extends javax.swing.JFrame {
                 int idCliente = Integer.parseInt(txtIdCliente.getText());
                 clDao.eliminarCliente(idCliente);
                 JOptionPane.showMessageDialog(null, "Cliente eliminado con exito");
-                limpiarTablaClientes();
+                limpiarTabla();
                 listarClientes();
                 limpiarCampos();
             }
@@ -1221,7 +1286,7 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClienteActionPerformed
         if("".equals(txtIdCliente.getText())){
-            JOptionPane.showMessageDialog(null, "Seleccione en la tabla el cliente a eliminar");
+            JOptionPane.showMessageDialog(null, "Seleccione en la tabla el cliente a actualizar");
         } else{
             if(!"".equals(txtDniCuitCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtDireccionCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtCorreoCliente.getText()) || !"".equals(txtRazonCliente.getText())){
                 cl.setDni_cuit(Long.parseLong(txtDniCuitCliente.getText()));  //Convertimos a long
@@ -1234,7 +1299,7 @@ public class Sistema extends javax.swing.JFrame {
                 
                 clDao.actualizarCliente(cl);
                 JOptionPane.showMessageDialog(null, "Cliente actualizado con exito");
-                limpiarTablaClientes();
+                limpiarTabla();
                 listarClientes();
                 limpiarCampos();
             } else {
@@ -1244,10 +1309,96 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnActualizarClienteActionPerformed
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
-        limpiarTablaClientes();
+        limpiarTabla();
         listarClientes();
         limpiarCampos();
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
+
+    private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
+        if(!"".equals(txtDniCuitProveedor.getText()) || !"".equals(txtNombreProveedor.getText()) || !"".equals(txtDireccionProveedor.getText()) || !"".equals(txtTelefonoProveedor.getText()) || !"".equals(txtCorreoProveedor.getText()) || !"".equals(txtRazonProveedor.getText())){
+            try{
+            prov.setDni_cuit(Long.parseLong(txtDniCuitProveedor.getText()));  //Convertimos a long
+            prov.setNombre(txtNombreProveedor.getText());
+            prov.setDireccion(txtDireccionProveedor.getText());
+            prov.setTelefono(Long.parseLong(txtTelefonoProveedor.getText()));
+            prov.setCorreo(txtCorreoProveedor.getText());
+            prov.setRazon_social(txtRazonProveedor.getText());
+            
+            provDao.registrarProveedor(prov);
+             JOptionPane.showMessageDialog(null, "Proveedor registrado con exito");
+             limpiarTabla();
+             listarProveedores();
+             limpiarCampos();
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(null, e.toString());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor completa todos los campos para el registro");
+        }
+
+    }//GEN-LAST:event_btnGuardarProveedorActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        limpiarTabla();
+        listarProveedores();
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnNuevoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProveedorActionPerformed
+        limpiarTabla();
+        listarProveedores();
+        limpiarCampos();
+    }//GEN-LAST:event_btnNuevoProveedorActionPerformed
+
+    private void btnEliminarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProveedorActionPerformed
+        if(!"".equals(txtIdProveedor.getText())){ //Si el txtId es distinto de vacio
+            int pregunta = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el proveedor?");
+            if(pregunta == 0){
+                int idProveedor = Integer.parseInt(txtIdProveedor.getText());
+                provDao.eliminarProveedor(idProveedor);
+                JOptionPane.showMessageDialog(null, "Proveedor eliminado con exito");
+                limpiarTabla();
+                listarProveedores();
+                limpiarCampos();
+            }
+        }
+    }//GEN-LAST:event_btnEliminarProveedorActionPerformed
+
+    private void tblProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProveedorMouseClicked
+        int fila = tblProveedor.rowAtPoint(evt.getPoint());
+        
+        txtIdProveedor.setText(tblProveedor.getValueAt(fila, 0).toString());
+        txtDniCuitProveedor.setText(tblProveedor.getValueAt(fila, 1).toString());
+        txtNombreProveedor.setText(tblProveedor.getValueAt(fila, 2).toString());
+        txtDireccionProveedor.setText(tblProveedor.getValueAt(fila, 3).toString());
+        txtTelefonoProveedor.setText(tblProveedor.getValueAt(fila, 4).toString());
+        txtCorreoProveedor.setText(tblProveedor.getValueAt(fila, 5).toString());
+        txtRazonProveedor.setText(tblProveedor.getValueAt(fila, 6).toString());
+    }//GEN-LAST:event_tblProveedorMouseClicked
+
+    private void btnActualizarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarProveedorActionPerformed
+        if("".equals(txtIdProveedor.getText())){
+            JOptionPane.showMessageDialog(null, "Seleccione en la tabla el proveedor a actualizar");
+        } else{
+            if(!"".equals(txtDniCuitProveedor.getText()) || !"".equals(txtNombreProveedor.getText()) || !"".equals(txtDireccionProveedor.getText()) || !"".equals(txtTelefonoProveedor.getText()) || !"".equals(txtCorreoProveedor.getText()) || !"".equals(txtRazonProveedor.getText())){
+                prov.setDni_cuit(Long.parseLong(txtDniCuitProveedor.getText()));  //Convertimos a long
+                prov.setNombre(txtNombreProveedor.getText());
+                prov.setDireccion(txtDireccionProveedor.getText());
+                prov.setTelefono(Long.parseLong(txtTelefonoProveedor.getText()));
+                prov.setCorreo(txtCorreoProveedor.getText());
+                prov.setRazon_social(txtRazonProveedor.getText());
+                prov.setId_proveedor(Integer.parseInt(txtIdProveedor.getText())); //le pasamos el id para la consulta
+                
+                provDao.actualizarProveedor(prov);
+                JOptionPane.showMessageDialog(null, "Proveedor actualizado con exito");
+                limpiarTabla();
+                listarProveedores();
+                limpiarCampos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Para actualizar deben estar todos los campos cargados");
+            }
+        }
+    }//GEN-LAST:event_btnActualizarProveedorActionPerformed
 
     /**
      * @param args the command line arguments

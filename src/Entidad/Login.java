@@ -1,5 +1,5 @@
 
-package Modelo;
+package Entidad;
 
 
 public class Login {
