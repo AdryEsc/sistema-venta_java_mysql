@@ -6,8 +6,10 @@ package Vista;
 
 import Entidad.Cliente;
 import Entidad.Proveedor;
+import Entidad.Producto;
 import Modelo.ClienteDao;
 import Modelo.ProveedorDao;
+import Modelo.ProductoDao;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +23,8 @@ public class Sistema extends javax.swing.JFrame {
     ClienteDao clDao = new ClienteDao();
     Proveedor prov = new Proveedor();
     ProveedorDao provDao = new ProveedorDao();
+    Producto prod = new Producto();
+    ProductoDao prodDao = new ProductoDao();
     DefaultTableModel modelo = new DefaultTableModel();
     
     /**
@@ -99,6 +103,14 @@ public class Sistema extends javax.swing.JFrame {
         txtTelefonoProveedor.setText("");
         txtCorreoProveedor.setText("");
         txtRazonProveedor.setText("");
+        
+        txtIdProducto.setText("");
+        txtCodigoProd.setText("");
+        txtDescripcionProd.setText("");
+        txtPrecioCostoProd.setText("");
+        txtPrecioVentaProd.setText("");
+        txtCantidadProd.setText("");
+        //cmbProveedor.getSelectedItem());
 
     }
 
@@ -878,6 +890,11 @@ public class Sistema extends javax.swing.JFrame {
         jLabel24.setText("Codigo");
 
         txtCodigoProd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtCodigoProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoProdActionPerformed(evt);
+            }
+        });
 
         jLabel25.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel25.setText("Descripcion");
@@ -916,6 +933,11 @@ public class Sistema extends javax.swing.JFrame {
         btnGuardarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarProd.setText("GUARDAR");
         btnGuardarProd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGuardarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProdActionPerformed(evt);
+            }
+        });
 
         tblProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -936,6 +958,11 @@ public class Sistema extends javax.swing.JFrame {
         }
 
         cmbProveedor.setEditable(true);
+        cmbProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProveedorActionPerformed(evt);
+            }
+        });
 
         btnNuevoProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoProd.setText("NUEVO");
@@ -1399,6 +1426,37 @@ public class Sistema extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnActualizarProveedorActionPerformed
+
+    private void txtCodigoProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoProdActionPerformed
+
+    private void btnGuardarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProdActionPerformed
+        if(!"".equals(txtCodigoProd.getText()) || !"".equals(txtDescripcionProd.getText()) || !"".equals(txtPrecioCostoProd.getText()) || !"".equals(txtPrecioVentaProd.getText()) || !"".equals(txtCantidadProd.getText()) || !"".equals(cmbProveedor.getSelectedItem())){
+            try{
+            prod.setCodigo(txtCodigoProd.getText());
+            prod.setDescripcion(txtDescripcionProd.getText());
+            prod.setPrecio_costo(Double.parseDouble(txtPrecioCostoProd.getText()));
+            prod.setPrecio_venta(Double.parseDouble(txtPrecioVentaProd.getText()));
+            prod.setCantidad(Integer.parseInt(txtCantidadProd.getText()));
+            prod.setProveedor(cmbProveedor.getSelectedItem().toString());
+            
+            prodDao.registrarProducto(prod);
+             JOptionPane.showMessageDialog(null, "Producto registrado con exito");
+             //limpiarTabla();
+             //listarProductos();
+             //limpiarCampos();
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(null, e.toString());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor completa todos los campos para el registro");
+        }
+    }//GEN-LAST:event_btnGuardarProdActionPerformed
+
+    private void cmbProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbProveedorActionPerformed
 
     /**
      * @param args the command line arguments
