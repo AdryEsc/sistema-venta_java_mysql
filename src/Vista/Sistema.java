@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Vista;
 
 import Entidad.Cliente;
@@ -13,6 +10,7 @@ import Modelo.ProductoDao;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -35,6 +33,10 @@ public class Sistema extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         txtIdCliente.setVisible(false);
         txtIdProveedor.setVisible(false);
+        txtIdProd.setVisible(false);
+        
+        AutoCompleteDecorator.decorate(cmbProveedor);
+        prodDao.consultarProveedor(cmbProveedor);
     }
     
     //Metodo para cargar tabla clientes
@@ -76,6 +78,26 @@ public class Sistema extends javax.swing.JFrame {
         }
         
         tblProveedor.setModel(modelo);
+    }
+    
+    public void listarProductos(){
+        List<Producto> listarProd = prodDao.listarProductos();    //metodo de ClientaDao
+        modelo = (DefaultTableModel) tblProducto.getModel();
+        Object[] obj = new Object[7];
+        
+        for(int i = 0; i < listarProd.size(); i++){
+            obj[0] = listarProd.get(i).getId_producto();
+            obj[1] = listarProd.get(i).getCodigo();
+            obj[2] = listarProd.get(i).getDescripcion();
+            obj[3] = listarProd.get(i).getPrecio_costo();
+            obj[4] = listarProd.get(i).getPrecio_venta();
+            obj[5] = listarProd.get(i).getCantidad();
+            obj[6] = listarProd.get(i).getProveedor();
+            
+            modelo.addRow(obj);
+        }
+        
+        tblProducto.setModel(modelo);
     }
 
     
@@ -124,12 +146,12 @@ public class Sistema extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnNuevaVenta = new javax.swing.JButton();
+        btnClientes = new javax.swing.JButton();
+        btnProveedores = new javax.swing.JButton();
+        btnProductos = new javax.swing.JButton();
+        btnVentas = new javax.swing.JButton();
+        btnConfig = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -245,51 +267,56 @@ public class Sistema extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 255));
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Nventa.png"))); // NOI18N
-        jButton1.setText("NUEVA VENTA");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevaVenta.setBackground(new java.awt.Color(255, 255, 255));
+        btnNuevaVenta.setForeground(new java.awt.Color(0, 0, 0));
+        btnNuevaVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Nventa.png"))); // NOI18N
+        btnNuevaVenta.setText("NUEVA VENTA");
+        btnNuevaVenta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jButton2.setForeground(new java.awt.Color(0, 0, 0));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Clientes.png"))); // NOI18N
-        jButton2.setText("CLIENTES");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnClientes.setBackground(new java.awt.Color(255, 255, 255));
+        btnClientes.setForeground(new java.awt.Color(0, 0, 0));
+        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Clientes.png"))); // NOI18N
+        btnClientes.setText("CLIENTES");
+        btnClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnClientesActionPerformed(evt);
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 255));
-        jButton3.setForeground(new java.awt.Color(0, 0, 0));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/proveedor.png"))); // NOI18N
-        jButton3.setText("PROVEEDORES");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnProveedores.setBackground(new java.awt.Color(255, 255, 255));
+        btnProveedores.setForeground(new java.awt.Color(0, 0, 0));
+        btnProveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/proveedor.png"))); // NOI18N
+        btnProveedores.setText("PROVEEDORES");
+        btnProveedores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnProveedores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnProveedoresActionPerformed(evt);
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(255, 255, 255));
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/producto.png"))); // NOI18N
-        jButton4.setText("PRODUCTOS");
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnProductos.setBackground(new java.awt.Color(255, 255, 255));
+        btnProductos.setForeground(new java.awt.Color(0, 0, 0));
+        btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/producto.png"))); // NOI18N
+        btnProductos.setText("PRODUCTOS");
+        btnProductos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductosActionPerformed(evt);
+            }
+        });
 
-        jButton5.setBackground(new java.awt.Color(255, 255, 255));
-        jButton5.setForeground(new java.awt.Color(0, 0, 0));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/compras.png"))); // NOI18N
-        jButton5.setText("VENTAS");
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVentas.setBackground(new java.awt.Color(255, 255, 255));
+        btnVentas.setForeground(new java.awt.Color(0, 0, 0));
+        btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/compras.png"))); // NOI18N
+        btnVentas.setText("VENTAS");
+        btnVentas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jButton6.setBackground(new java.awt.Color(255, 255, 255));
-        jButton6.setForeground(new java.awt.Color(0, 0, 0));
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/config.png"))); // NOI18N
-        jButton6.setText("CONFIG.");
-        jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnConfig.setBackground(new java.awt.Color(255, 255, 255));
+        btnConfig.setForeground(new java.awt.Color(0, 0, 0));
+        btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/config.png"))); // NOI18N
+        btnConfig.setText("CONFIG.");
+        btnConfig.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/logo_espectro.png"))); // NOI18N
 
@@ -299,12 +326,12 @@ public class Sistema extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnNuevaVenta, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                    .addComponent(btnClientes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnProveedores, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnProductos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnVentas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnConfig, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -317,17 +344,17 @@ public class Sistema extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
-                .addComponent(jButton1)
+                .addComponent(btnNuevaVenta)
                 .addGap(32, 32, 32)
-                .addComponent(jButton2)
+                .addComponent(btnClientes)
                 .addGap(25, 25, 25)
-                .addComponent(jButton3)
+                .addComponent(btnProveedores)
                 .addGap(29, 29, 29)
-                .addComponent(jButton4)
+                .addComponent(btnProductos)
                 .addGap(28, 28, 28)
-                .addComponent(jButton5)
+                .addComponent(btnVentas)
                 .addGap(29, 29, 29)
-                .addComponent(jButton6)
+                .addComponent(btnConfig)
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -944,17 +971,23 @@ public class Sistema extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODIGO", "DESCRIPCION", "PRECIO COSTO", "PRECIO VENTA", "CANTIDAD", "PROVEEDOR"
+                "ID_PRODUCTO", "CODIGO", "DESCRIPCION", "COSTO", "VENTA", "CANTIDAD", "PROVEEDOR"
             }
         ));
+        tblProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProductoMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tblProducto);
         if (tblProducto.getColumnModel().getColumnCount() > 0) {
-            tblProducto.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tblProducto.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblProducto.getColumnModel().getColumn(2).setPreferredWidth(50);
-            tblProducto.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tblProducto.getColumnModel().getColumn(4).setPreferredWidth(50);
-            tblProducto.getColumnModel().getColumn(5).setPreferredWidth(150);
+            tblProducto.getColumnModel().getColumn(0).setPreferredWidth(60);
+            tblProducto.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tblProducto.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblProducto.getColumnModel().getColumn(3).setPreferredWidth(30);
+            tblProducto.getColumnModel().getColumn(4).setPreferredWidth(30);
+            tblProducto.getColumnModel().getColumn(5).setPreferredWidth(30);
+            tblProducto.getColumnModel().getColumn(6).setPreferredWidth(120);
         }
 
         cmbProveedor.setEditable(true);
@@ -967,6 +1000,11 @@ public class Sistema extends javax.swing.JFrame {
         btnNuevoProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoProd.setText("NUEVO");
         btnNuevoProd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNuevoProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoProdActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1275,11 +1313,11 @@ public class Sistema extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         limpiarTabla();
         listarClientes();
         jTabbedPane1.setSelectedIndex(1);   //muestra el tab de cliente
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnClientesActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
        
@@ -1365,11 +1403,11 @@ public class Sistema extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnGuardarProveedorActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedoresActionPerformed
         limpiarTabla();
         listarProveedores();
         jTabbedPane1.setSelectedIndex(2);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnProveedoresActionPerformed
 
     private void btnNuevoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProveedorActionPerformed
         limpiarTabla();
@@ -1432,7 +1470,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCodigoProdActionPerformed
 
     private void btnGuardarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProdActionPerformed
-        if(!"".equals(txtCodigoProd.getText()) || !"".equals(txtDescripcionProd.getText()) || !"".equals(txtPrecioCostoProd.getText()) || !"".equals(txtPrecioVentaProd.getText()) || !"".equals(txtCantidadProd.getText()) || !"".equals(cmbProveedor.getSelectedItem())){
+        if(!"".equals(txtCodigoProd.getText()) || !"".equals(txtDescripcionProd.getText()) || !"".equals(txtPrecioCostoProd.getText()) || !"".equals(txtPrecioVentaProd.getText()) || !"".equals(txtCantidadProd.getText()) /*|| !"".equals(cmbProveedor.getSelectedItem())*/){
             try{
             prod.setCodigo(txtCodigoProd.getText());
             prod.setDescripcion(txtDescripcionProd.getText());
@@ -1443,9 +1481,9 @@ public class Sistema extends javax.swing.JFrame {
             
             prodDao.registrarProducto(prod);
              JOptionPane.showMessageDialog(null, "Producto registrado con exito");
-             //limpiarTabla();
-             //listarProductos();
-             //limpiarCampos();
+             limpiarTabla();
+             listarProductos();
+             limpiarCampos();
             } catch (Exception e){
                 JOptionPane.showMessageDialog(null, e.toString());
             }
@@ -1457,6 +1495,42 @@ public class Sistema extends javax.swing.JFrame {
     private void cmbProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProveedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbProveedorActionPerformed
+
+    private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
+        limpiarTabla();
+        listarProductos();
+        jTabbedPane1.setSelectedIndex(3);
+    }//GEN-LAST:event_btnProductosActionPerformed
+
+    private void btnNuevoProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProdActionPerformed
+        limpiarTabla();
+        listarProductos();
+        limpiarCampos();
+    }//GEN-LAST:event_btnNuevoProdActionPerformed
+
+    private void tblProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductoMouseClicked
+        /*
+        int fila = tblCliente.rowAtPoint(evt.getPoint());
+        
+        txtIdCliente.setText(tblCliente.getValueAt(fila, 0).toString());
+        txtDniCuitCliente.setText(tblCliente.getValueAt(fila, 1).toString());
+        txtNombreCliente.setText(tblCliente.getValueAt(fila, 2).toString());
+        txtDireccionCliente.setText(tblCliente.getValueAt(fila, 3).toString());
+        txtTelefonoCliente.setText(tblCliente.getValueAt(fila, 4).toString());
+        txtCorreoCliente.setText(tblCliente.getValueAt(fila, 5).toString());
+        txtRazonCliente.setText(tblCliente.getValueAt(fila, 6).toString());
+        */
+        
+        /*
+        txtIdProducto.setText("");
+        txtCodigoProd.setText("");
+        txtDescripcionProd.setText("");
+        txtPrecioCostoProd.setText("");
+        txtPrecioVentaProd.setText("");
+        txtCantidadProd.setText("");
+        //cmbProveedor.getSelectedItem());
+        */
+    }//GEN-LAST:event_tblProductoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1498,6 +1572,8 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizarEmpresa;
     private javax.swing.JButton btnActualizarProd;
     private javax.swing.JButton btnActualizarProveedor;
+    private javax.swing.JButton btnClientes;
+    private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JButton btnEliminarProd;
     private javax.swing.JButton btnEliminarProveedor;
@@ -1507,17 +1583,15 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarProd;
     private javax.swing.JButton btnGuardarProveedor;
     private javax.swing.JButton btnImprimirExcel;
+    private javax.swing.JButton btnNuevaVenta;
     private javax.swing.JButton btnNuevoCliente;
     private javax.swing.JButton btnNuevoProd;
     private javax.swing.JButton btnNuevoProveedor;
     private javax.swing.JButton btnPdfVentas;
+    private javax.swing.JButton btnProductos;
+    private javax.swing.JButton btnProveedores;
+    private javax.swing.JButton btnVentas;
     private javax.swing.JComboBox<String> cmbProveedor;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

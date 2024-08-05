@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class ProductoDao {
@@ -47,5 +48,68 @@ public class ProductoDao {
                 System.out.println(ex.toString());
             }
         }
+    }
+    
+    
+    public void consultarProveedor(JComboBox cbProveedor){
+        String consultaSQL = "SELECT nombre FROM proveedores";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();
+            
+            while(rs.next()){
+                cbProveedor.addItem(rs.getString("nombre"));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+    }
+    
+    //Devuelve lista de productos de la DB
+    public List listarProductos(){
+        List<Producto> listaProducto = new ArrayList();
+        String consultaSQL = "SELECT * FROM productos WHERE estado = 1";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Producto prod = new Producto();
+                
+                //cargamos el objeto producto
+                prod.setId_producto(rs.getInt("id_producto"));
+                prod.setCodigo(rs.getString("codigo"));
+                prod.setDescripcion(rs.getString("descripcion"));
+                prod.setPrecio_costo(rs.getDouble("precio_costo"));
+                prod.setPrecio_venta(rs.getDouble("precio_venta"));
+                prod.setCantidad(rs.getInt("cantidad"));
+                prod.setProveedor(rs.getString("proveedor"));
+                
+                //Agregamos cliente a la lista
+                listaProducto.add(prod);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaProducto;
     }
 }
