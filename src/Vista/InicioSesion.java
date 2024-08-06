@@ -197,12 +197,12 @@ public class InicioSesion extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, 390, 460));
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1.setBackground(new java.awt.Color(0, 102, 102));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/LOGO_FENIX.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/logo_espectro.png"))); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(204, 102, 0));
+        jLabel8.setForeground(new java.awt.Color(51, 255, 204));
         jLabel8.setText("SOLUCIONES INFORMATICAS");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

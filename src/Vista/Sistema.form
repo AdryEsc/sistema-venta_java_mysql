@@ -1401,15 +1401,13 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtCodigoProd" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                              <Component id="txtCantidadProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPrecioVentaProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPrecioCostoProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtDescripcionProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cmbProveedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtCantidadProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtPrecioVentaProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtPrecioCostoProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtDescripcionProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbProveedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCodigoProd" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -1533,6 +1531,10 @@
                   <Color id="Hand Cursor"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnImprimirExcelMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImprimirExcelActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnEliminarProd">
               <Properties>
@@ -1544,6 +1546,9 @@
                   <Color id="Hand Cursor"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarProdActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnActualizarProd">
               <Properties>
@@ -1555,6 +1560,9 @@
                   <Color id="Hand Cursor"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarProdActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnGuardarProd">
               <Properties>

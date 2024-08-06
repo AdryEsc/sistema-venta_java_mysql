@@ -267,7 +267,7 @@
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
+          <Color blue="66" green="66" red="0" type="rgb"/>
         </Property>
       </Properties>
       <Constraints>
@@ -307,7 +307,7 @@
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Img/LOGO_FENIX.png"/>
+              <Image iconType="3" name="/Img/logo_espectro.png"/>
             </Property>
           </Properties>
         </Component>
@@ -317,7 +317,7 @@
               <Font name="Dialog" size="14" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="0" green="66" red="cc" type="rgb"/>
+              <Color blue="cc" green="ff" red="33" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="SOLUCIONES INFORMATICAS"/>
           </Properties>

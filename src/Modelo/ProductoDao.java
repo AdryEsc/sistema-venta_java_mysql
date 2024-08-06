@@ -112,4 +112,60 @@ public class ProductoDao {
         }
         return listaProducto;
     }
-}
+    
+    //Baja del producto
+    public boolean eliminarProducto(int id){
+        String consultaSQL = "DELETE FROM productos WHERE id_producto = ?";
+        //String consultaSQL = "UPDATE proveedores SET estado = 0 WHERE id_proveedor = ?";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            ps.setInt(1, id);   //pasamos el valor al ? de la consulta
+            ps.execute();
+            
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        
+    }
+    
+    //Actualiza cliente
+    public boolean actualizarProducto(Producto prod){
+        String consultaSQL = "UPDATE productos SET codigo = ?, descripcion = ?, precio_costo = ?, precio_venta = ?, cantidad = ?, proveedor = ? WHERE id_producto = ?";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            ps.setString(1, prod.getCodigo());   //pasamos el valor al ? de la consulta
+            ps.setString(2, prod.getDescripcion());
+            ps.setDouble(3, prod.getPrecio_costo());
+            ps.setDouble(4, prod.getPrecio_venta());
+            ps.setInt(5, prod.getCantidad());
+            ps.setString(6, prod.getProveedor());
+            ps.setInt(7, prod.getId_producto());   //pasamos el id 
+            
+            ps.execute();
+            
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+    
+    }
+} //Fin clase principal

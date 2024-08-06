@@ -7,6 +7,8 @@ import Entidad.Producto;
 import Modelo.ClienteDao;
 import Modelo.ProveedorDao;
 import Modelo.ProductoDao;
+import Reportes.ExportarExcel;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -132,7 +134,8 @@ public class Sistema extends javax.swing.JFrame {
         txtPrecioCostoProd.setText("");
         txtPrecioVentaProd.setText("");
         txtCantidadProd.setText("");
-        //cmbProveedor.getSelectedItem());
+        //AutoCompleteDecorator.decorate(cmbProveedor);
+        //prodDao.consultarProveedor(cmbProveedor);
 
     }
 
@@ -948,14 +951,34 @@ public class Sistema extends javax.swing.JFrame {
 
         btnImprimirExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/excel.png"))); // NOI18N
         btnImprimirExcel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnImprimirExcel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnImprimirExcelMouseClicked(evt);
+            }
+        });
+        btnImprimirExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirExcelActionPerformed(evt);
+            }
+        });
 
         btnEliminarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarProd.setText("ELIMINAR");
         btnEliminarProd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProdActionPerformed(evt);
+            }
+        });
 
         btnActualizarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarProd.setText("ACTUALIZAR");
         btnActualizarProd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnActualizarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarProdActionPerformed(evt);
+            }
+        });
 
         btnGuardarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarProd.setText("GUARDAR");
@@ -1081,14 +1104,13 @@ public class Sistema extends javax.swing.JFrame {
                             .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel26, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCodigoProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtCantidadProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtPrecioVentaProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtPrecioCostoProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtDescripcionProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCantidadProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioVentaProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioCostoProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDescripcionProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCodigoProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1470,23 +1492,30 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCodigoProdActionPerformed
 
     private void btnGuardarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProdActionPerformed
+        boolean verificarComaDecimal;
         if(!"".equals(txtCodigoProd.getText()) || !"".equals(txtDescripcionProd.getText()) || !"".equals(txtPrecioCostoProd.getText()) || !"".equals(txtPrecioVentaProd.getText()) || !"".equals(txtCantidadProd.getText()) /*|| !"".equals(cmbProveedor.getSelectedItem())*/){
-            try{
-            prod.setCodigo(txtCodigoProd.getText());
-            prod.setDescripcion(txtDescripcionProd.getText());
-            prod.setPrecio_costo(Double.parseDouble(txtPrecioCostoProd.getText()));
-            prod.setPrecio_venta(Double.parseDouble(txtPrecioVentaProd.getText()));
-            prod.setCantidad(Integer.parseInt(txtCantidadProd.getText()));
-            prod.setProveedor(cmbProveedor.getSelectedItem().toString());
+            if(txtPrecioCostoProd.getText().contains(",") || txtPrecioVentaProd.getText().contains(",")){ //Verificamos si se agrego la coma en los precios
+                JOptionPane.showMessageDialog(null, "Por favor, para la parte decimal del precio utilice el punto ( . )");
+                } else {
+                    try{
+                    prod.setCodigo(txtCodigoProd.getText());
+                    prod.setDescripcion(txtDescripcionProd.getText());
+                    prod.setPrecio_costo(Double.parseDouble(txtPrecioCostoProd.getText()));
+                    prod.setPrecio_venta(Double.parseDouble(txtPrecioVentaProd.getText()));
+                    prod.setCantidad(Integer.parseInt(txtCantidadProd.getText()));
+                    prod.setProveedor(cmbProveedor.getSelectedItem().toString());
             
-            prodDao.registrarProducto(prod);
-             JOptionPane.showMessageDialog(null, "Producto registrado con exito");
-             limpiarTabla();
-             listarProductos();
-             limpiarCampos();
-            } catch (Exception e){
-                JOptionPane.showMessageDialog(null, e.toString());
+                    prodDao.registrarProducto(prod);
+                    JOptionPane.showMessageDialog(null, "Producto registrado con exito");
+                    limpiarTabla();
+                    listarProductos();
+                    limpiarCampos();
+            
+                    } catch (Exception e){
+                    JOptionPane.showMessageDialog(null, e.toString());
+                }
             }
+           
         } else {
             JOptionPane.showMessageDialog(null, "Por favor completa todos los campos para el registro");
         }
@@ -1509,28 +1538,75 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoProdActionPerformed
 
     private void tblProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductoMouseClicked
-        /*
-        int fila = tblCliente.rowAtPoint(evt.getPoint());
+        int fila = tblProducto.rowAtPoint(evt.getPoint());
         
-        txtIdCliente.setText(tblCliente.getValueAt(fila, 0).toString());
-        txtDniCuitCliente.setText(tblCliente.getValueAt(fila, 1).toString());
-        txtNombreCliente.setText(tblCliente.getValueAt(fila, 2).toString());
-        txtDireccionCliente.setText(tblCliente.getValueAt(fila, 3).toString());
-        txtTelefonoCliente.setText(tblCliente.getValueAt(fila, 4).toString());
-        txtCorreoCliente.setText(tblCliente.getValueAt(fila, 5).toString());
-        txtRazonCliente.setText(tblCliente.getValueAt(fila, 6).toString());
-        */
+        txtIdProducto.setText(tblProducto.getValueAt(fila, 0).toString());
+        txtCodigoProd.setText(tblProducto.getValueAt(fila, 1).toString());
+        txtDescripcionProd.setText(tblProducto.getValueAt(fila, 2).toString());
+        txtPrecioCostoProd.setText(tblProducto.getValueAt(fila, 3).toString());
+        txtPrecioVentaProd.setText(tblProducto.getValueAt(fila, 4).toString());
+        txtCantidadProd.setText(tblProducto.getValueAt(fila, 5).toString());
+        cmbProveedor.setSelectedItem(tblProducto.getValueAt(fila, 6).toString());
         
-        /*
-        txtIdProducto.setText("");
-        txtCodigoProd.setText("");
-        txtDescripcionProd.setText("");
-        txtPrecioCostoProd.setText("");
-        txtPrecioVentaProd.setText("");
-        txtCantidadProd.setText("");
-        //cmbProveedor.getSelectedItem());
-        */
     }//GEN-LAST:event_tblProductoMouseClicked
+
+    private void btnEliminarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProdActionPerformed
+        if(!"".equals(txtIdProducto.getText())){ //Si el txtId es distinto de vacio
+            int pregunta = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el producto?");
+            if(pregunta == 0){
+                int idProducto = Integer.parseInt(txtIdProducto.getText());
+                prodDao.eliminarProducto(idProducto);
+                JOptionPane.showMessageDialog(null, "Producto eliminado con exito");
+                limpiarTabla();
+                listarProductos();
+                limpiarCampos();
+               
+            }
+        }
+    }//GEN-LAST:event_btnEliminarProdActionPerformed
+
+    private void btnActualizarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarProdActionPerformed
+        if("".equals(txtIdProducto.getText())){
+            JOptionPane.showMessageDialog(null, "Seleccione en la tabla el producto a actualizar");
+        } else{
+            if(!"".equals(txtCodigoProd.getText()) || !"".equals(txtDescripcionProd.getText()) || !"".equals(txtPrecioCostoProd.getText()) || !"".equals(txtPrecioVentaProd.getText()) || !"".equals(txtCantidadProd.getText())){
+                if(txtPrecioCostoProd.getText().contains(",") || txtPrecioVentaProd.getText().contains(",")){ //Verificamos si se agrego la coma en los precios
+                JOptionPane.showMessageDialog(null, "Por favor, para la parte decimal del precio utilice el punto ( . )");
+                } else {
+                prod.setCodigo(txtCodigoProd.getText());  //Convertimos a long
+                prod.setDescripcion(txtDescripcionProd.getText());
+                prod.setPrecio_costo(Double.parseDouble(txtPrecioCostoProd.getText()));
+                prod.setPrecio_venta(Double.parseDouble(txtPrecioVentaProd.getText()));
+                prod.setCantidad(Integer.parseInt(txtCantidadProd.getText()));
+                prod.setProveedor(cmbProveedor.getSelectedItem().toString());
+                prod.setId_producto(Integer.parseInt(txtIdProducto.getText())); //le pasamos el id para la consulta
+                
+                prodDao.actualizarProducto(prod);
+                JOptionPane.showMessageDialog(null, "Producto actualizado con exito");
+                limpiarTabla();
+                listarProductos();
+                limpiarCampos();
+                        }
+            } else {
+                JOptionPane.showMessageDialog(null, "Para actualizar deben estar todos los campos cargados");
+            }
+        }
+    }//GEN-LAST:event_btnActualizarProdActionPerformed
+
+    private void btnImprimirExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirExcelActionPerformed
+   
+    }//GEN-LAST:event_btnImprimirExcelActionPerformed
+
+    private void btnImprimirExcelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirExcelMouseClicked
+      ExportarExcel obj;
+
+        try {
+            obj = new ExportarExcel();
+            obj.exportarExcel(tblProducto);
+        } catch (IOException ex) {
+            System.out.println("Error: " + ex);
+        }
+    }//GEN-LAST:event_btnImprimirExcelMouseClicked
 
     /**
      * @param args the command line arguments
