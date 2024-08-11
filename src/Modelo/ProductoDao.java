@@ -77,7 +77,7 @@ public class ProductoDao {
     //Devuelve lista de productos de la DB
     public List listarProductos(){
         List<Producto> listaProducto = new ArrayList();
-        String consultaSQL = "SELECT * FROM productos WHERE estado = 1";
+        String consultaSQL = "SELECT * FROM productos WHERE estado = 1 order by descripcion";
         
         try {
             conn = conex.getConnection();
@@ -96,6 +96,84 @@ public class ProductoDao {
                 prod.setPrecio_venta(rs.getDouble("precio_venta"));
                 prod.setCantidad(rs.getInt("cantidad"));
                 prod.setProveedor(rs.getString("proveedor"));
+                
+                //Agregamos cliente a la lista
+                listaProducto.add(prod);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaProducto;
+    }
+    
+    //Devuelve lista de productos de la DB
+    public List listarProductosParaVenta(){
+        List<Producto> listaProducto = new ArrayList();
+        String consultaSQL = "SELECT * FROM productos WHERE estado = 1 order by descripcion";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Producto prod = new Producto();
+                
+                //cargamos el objeto producto
+                //prod.setId_producto(rs.getInt("id_producto"));
+                prod.setCodigo(rs.getString("codigo"));
+                prod.setDescripcion(rs.getString("descripcion"));
+                //prod.setPrecio_costo(rs.getDouble("precio_costo"));
+                prod.setPrecio_venta(rs.getDouble("precio_venta"));
+                prod.setCantidad(rs.getInt("cantidad"));
+                //prod.setProveedor(rs.getString("proveedor"));
+                
+                //Agregamos cliente a la lista
+                listaProducto.add(prod);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaProducto;
+    }
+    
+    //Devuelve lista de productos de la DB
+    public List listarProductosParaVentaPorDescripcion(String cadena){
+        List<Producto> listaProducto = new ArrayList();
+        String consultaSQL = "SELECT * FROM productos WHERE estado = 1 AND descripcion like '%" + cadena + "%' order by descripcion";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Producto prod = new Producto();
+                
+                //cargamos el objeto producto
+                //prod.setId_producto(rs.getInt("id_producto"));
+                prod.setCodigo(rs.getString("codigo"));
+                prod.setDescripcion(rs.getString("descripcion"));
+                //prod.setPrecio_costo(rs.getDouble("precio_costo"));
+                prod.setPrecio_venta(rs.getDouble("precio_venta"));
+                prod.setCantidad(rs.getInt("cantidad"));
+                //prod.setProveedor(rs.getString("proveedor"));
                 
                 //Agregamos cliente a la lista
                 listaProducto.add(prod);
@@ -168,4 +246,61 @@ public class ProductoDao {
         }
     
     }
+    
+    public Producto buscarProductoPorId(int id_producto){
+        Producto prod = new Producto();
+        String consultaSQL = "SELECT * FROM productos WHERE id_producto = ?";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            ps.setInt(1, id_producto);   //pasamos el valor al ? de la consulta
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+                prod.setDescripcion(rs.getString("descripcion"));
+                prod.setPrecio_venta(rs.getDouble("precio_venta"));
+                prod.setCantidad(rs.getInt("cantidad"));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return prod;
+    }
+    
+    public Producto buscarProductoPorCodido(String codigo){
+        Producto prod = new Producto();
+        String consultaSQL = "SELECT * FROM productos WHERE codigo = ?";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            ps.setString(1, codigo);   //pasamos el valor al ? de la consulta
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+                prod.setDescripcion(rs.getString("descripcion"));
+                prod.setPrecio_venta(rs.getDouble("precio_venta"));
+                prod.setCantidad(rs.getInt("cantidad"));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return prod;
+    }
+    
 } //Fin clase principal

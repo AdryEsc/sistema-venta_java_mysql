@@ -52,7 +52,7 @@ public class ClienteDao {
     //Devuelve lista de clientes de la DB
     public List listarClientes(){
         List<Cliente> listaCliente = new ArrayList();
-        String consultaSQL = "SELECT * FROM clientes WHERE estado = 1";
+        String consultaSQL = "SELECT * FROM clientes WHERE estado = 1 order by nombre";
         
         try {
             conn = conex.getConnection();
@@ -141,7 +141,85 @@ public class ClienteDao {
                 System.out.println(ex.toString());
             }
         }
-    
     }
     
-}
+    //Devuelve lista de clientes de la DB
+    public List buscarClientesPorNombre(String cadena){
+        List<Cliente> listaCliente = new ArrayList();
+        String consultaSQL = "SELECT * FROM clientes WHERE estado = 1 AND nombre like '%" + cadena + "%' order by nombre";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Cliente cliente = new Cliente();
+                
+                //cargamos el objeto cliente
+                cliente.setId_cliente(rs.getInt("id_cliente"));
+                cliente.setDni_cuit(rs.getLong("dni_cuit"));
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setDireccion(rs.getString("direccion"));
+                cliente.setTelefono(rs.getLong("telefono"));
+                cliente.setCorreo(rs.getString("correo"));
+                cliente.setRazon_social(rs.getString("razon_social"));
+                
+                //Agregamos cliente a la lista
+                listaCliente.add(cliente);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaCliente;
+    }
+    
+    //Devuelve lista de clientes de la DB
+    public List buscarClientesPorDni(String cadena){
+        List<Cliente> listaCliente = new ArrayList();
+        String consultaSQL = "SELECT * FROM clientes WHERE estado = 1 AND dni_cuit like '%" + cadena + "%' order by nombre";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Cliente cliente = new Cliente();
+                
+                //cargamos el objeto cliente
+                cliente.setId_cliente(rs.getInt("id_cliente"));
+                cliente.setDni_cuit(rs.getLong("dni_cuit"));
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setDireccion(rs.getString("direccion"));
+                cliente.setTelefono(rs.getLong("telefono"));
+                cliente.setCorreo(rs.getString("correo"));
+                cliente.setRazon_social(rs.getString("razon_social"));
+                
+                //Agregamos cliente a la lista
+                listaCliente.add(cliente);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaCliente;
+    }
+    
+    
+}//Fin clase

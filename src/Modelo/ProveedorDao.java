@@ -54,7 +54,7 @@ public class ProveedorDao {
     //Devuelve lista de proveedores de la DB
     public List listarProveedores(){
         List<Proveedor> listaProveedor = new ArrayList();
-        String consultaSQL = "SELECT * FROM proveedores WHERE estado = 1";
+        String consultaSQL = "SELECT * FROM proveedores WHERE estado = 1 order by nombre";
         
         try {
             conn = conex.getConnection();
