@@ -145,4 +145,82 @@ public class ProveedorDao {
         }
     
     }
+    
+    //Devuelve lista de clientes de la DB
+    public List buscarProveedoresPorNombre(String cadena){
+        List<Proveedor> listaProveedor = new ArrayList();
+        String consultaSQL = "SELECT * FROM proveedores WHERE estado = 1 AND nombre like '%" + cadena + "%' order by nombre";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Proveedor proveedor = new Proveedor();
+                
+                //cargamos el objeto proveedor
+                proveedor.setId_proveedor(rs.getInt("id_proveedor"));
+                proveedor.setDni_cuit(rs.getLong("dni_cuit"));
+                proveedor.setNombre(rs.getString("nombre"));
+                proveedor.setDireccion(rs.getString("direccion"));
+                proveedor.setTelefono(rs.getLong("telefono"));
+                proveedor.setCorreo(rs.getString("correo"));
+                proveedor.setRazon_social(rs.getString("razon_social"));
+                
+                //Agregamos proveedor a la lista
+                listaProveedor.add(proveedor);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaProveedor;
+    }
+    
+    //Devuelve lista de clientes de la DB
+    public List buscarProveedoresPorDni(String cadena){
+        List<Proveedor> listaProveedor = new ArrayList();
+        String consultaSQL = "SELECT * FROM proveedores WHERE estado = 1 AND dni_cuit like '%" + cadena + "%' order by nombre";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Proveedor proveedor = new Proveedor();
+                
+                //cargamos el objeto proveedor
+                proveedor.setId_proveedor(rs.getInt("id_proveedor"));
+                proveedor.setDni_cuit(rs.getLong("dni_cuit"));
+                proveedor.setNombre(rs.getString("nombre"));
+                proveedor.setDireccion(rs.getString("direccion"));
+                proveedor.setTelefono(rs.getLong("telefono"));
+                proveedor.setCorreo(rs.getString("correo"));
+                proveedor.setRazon_social(rs.getString("razon_social"));
+                
+                //Agregamos proveedor a la lista
+                listaProveedor.add(proveedor);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaProveedor;
+    }
 }

@@ -11,6 +11,7 @@ import Reportes.ExcelProductos;
 import Reportes.ExportarExcel;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +29,17 @@ public class Sistema extends javax.swing.JFrame {
     Producto prod = new Producto();
     ProductoDao prodDao = new ProductoDao();
     DefaultTableModel modelo = new DefaultTableModel();
+    int item = 0;
+    
+    String codigoAux = "";
+    String descripcionAux = "";
+    String precioAux = "";
+    String existenciaAux = "";
+    
+    private static final int COLUMNA_CANTIDAD = 3;
+    private static final int COLUMNA_PRECIO = 2;
+    private static final int COLUMNA_SUBTOTAL = 4;
+    
     
     /**
      * Creates new form Sistema
@@ -43,12 +55,32 @@ public class Sistema extends javax.swing.JFrame {
         prodDao.consultarProveedor(cmbProveedor);
         
         listarProductosParaVenta();
+        
     }
+    
+    //Metodo que al ingresar la cantidad, calcula el subtotal
+    public void calcularSubtotal(){
+        Double subTotal = 0.0;
+        int numFila = tblVenta.getRowCount();
+        for(int i = 0; i < numFila; i++){
+            int cantidad = Integer.parseInt(tblVenta.getValueAt(i, COLUMNA_CANTIDAD).toString());
+            double precio = Double.parseDouble(tblVenta.getValueAt(i, COLUMNA_PRECIO).toString());
+            double subtotalCalculado = cantidad * precio;
+            
+            tblVenta.getModel().setValueAt(subtotalCalculado, i, COLUMNA_SUBTOTAL);
+            subTotal += subtotalCalculado;
+            tblVenta.putClientProperty("terminateEditOnFocusLost", true);
+        }
+        
+        
+    
+    }
+   
     
     //Metodo para cargar tabla clientes
     public void listarClientes(){
         List<Cliente> listarCl = clDao.listarClientes();    //metodo de ClientaDao
-        modelo = (DefaultTableModel) tblCliente.getModel();
+        modelo =(DefaultTableModel) tblCliente.getModel(); 
         Object[] obj = new Object[7];
         
         for(int i = 0; i < listarCl.size(); i++){
@@ -108,6 +140,48 @@ public class Sistema extends javax.swing.JFrame {
         tblCliente.setModel(modelo);
     }
     
+    //Metodo para cargar tabla clientes
+    public void buscarProveedoresPorNombre(String cadena){
+        List<Proveedor> listarProv = provDao.buscarProveedoresPorNombre(cadena);    //metodo de ClientaDao
+        modelo = (DefaultTableModel) tblProveedor.getModel();
+        Object[] obj = new Object[7];
+        
+        for(int i = 0; i < listarProv.size(); i++){
+            obj[0] = listarProv.get(i).getId_proveedor();
+            obj[1] = listarProv.get(i).getDni_cuit();
+            obj[2] = listarProv.get(i).getNombre();
+            obj[3] = listarProv.get(i).getDireccion();
+            obj[4] = listarProv.get(i).getTelefono();
+            obj[5] = listarProv.get(i).getCorreo();
+            obj[6] = listarProv.get(i).getRazon_social();
+            
+            modelo.addRow(obj);
+        }
+        
+        tblProveedor.setModel(modelo);
+    }
+    
+    //Metodo para cargar tabla clientes
+    public void buscarProveedoresPorDni(String cadena){
+        List<Proveedor> listarProv = provDao.buscarProveedoresPorDni(cadena);    //metodo de ClientaDao
+        modelo = (DefaultTableModel) tblProveedor.getModel();
+        Object[] obj = new Object[7];
+        
+        for(int i = 0; i < listarProv.size(); i++){
+            obj[0] = listarProv.get(i).getId_proveedor();
+            obj[1] = listarProv.get(i).getDni_cuit();
+            obj[2] = listarProv.get(i).getNombre();
+            obj[3] = listarProv.get(i).getDireccion();
+            obj[4] = listarProv.get(i).getTelefono();
+            obj[5] = listarProv.get(i).getCorreo();
+            obj[6] = listarProv.get(i).getRazon_social();
+            
+            modelo.addRow(obj);
+        }
+        
+        tblProveedor.setModel(modelo);
+    }
+    
     public void listarProveedores(){
         List<Proveedor> listarProv = provDao.listarProveedores();    //metodo de ClientaDao
         modelo = (DefaultTableModel) tblProveedor.getModel();
@@ -130,6 +204,46 @@ public class Sistema extends javax.swing.JFrame {
     
     public void listarProductos(){
         List<Producto> listarProd = prodDao.listarProductos();    //metodo de ClientaDao
+        modelo = (DefaultTableModel) tblProducto.getModel();
+        Object[] obj = new Object[7];
+        
+        for(int i = 0; i < listarProd.size(); i++){
+            obj[0] = listarProd.get(i).getId_producto();
+            obj[1] = listarProd.get(i).getCodigo();
+            obj[2] = listarProd.get(i).getDescripcion();
+            obj[3] = listarProd.get(i).getPrecio_costo();
+            obj[4] = listarProd.get(i).getPrecio_venta();
+            obj[5] = listarProd.get(i).getCantidad();
+            obj[6] = listarProd.get(i).getProveedor();
+            
+            modelo.addRow(obj);
+        }
+        
+        tblProducto.setModel(modelo);
+    }
+    
+    public void buscarProductosPorDescripcion(String cadena){
+        List<Producto> listarProd = prodDao.buscarProductosPorDescripcion(cadena);    //metodo de ClientaDao
+        modelo = (DefaultTableModel) tblProducto.getModel();
+        Object[] obj = new Object[7];
+        
+        for(int i = 0; i < listarProd.size(); i++){
+            obj[0] = listarProd.get(i).getId_producto();
+            obj[1] = listarProd.get(i).getCodigo();
+            obj[2] = listarProd.get(i).getDescripcion();
+            obj[3] = listarProd.get(i).getPrecio_costo();
+            obj[4] = listarProd.get(i).getPrecio_venta();
+            obj[5] = listarProd.get(i).getCantidad();
+            obj[6] = listarProd.get(i).getProveedor();
+            
+            modelo.addRow(obj);
+        }
+        
+        tblProducto.setModel(modelo);
+    }
+    
+    public void buscarProductosPorCodigo(String cadena){
+        List<Producto> listarProd = prodDao.buscarProductosPorCodigo(cadena);    //metodo de ClientaDao
         modelo = (DefaultTableModel) tblProducto.getModel();
         Object[] obj = new Object[7];
         
@@ -264,7 +378,7 @@ public class Sistema extends javax.swing.JFrame {
         tblProductosVenta = new javax.swing.JTable();
         txtBuscarProductoPorDesc = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnAgregarProdParaVenta = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -310,9 +424,9 @@ public class Sistema extends javax.swing.JFrame {
         tblProveedor = new javax.swing.JTable();
         txtIdProveedor = new javax.swing.JTextField();
         jLabel39 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtBuscarProvPorDni = new javax.swing.JTextField();
         jLabel40 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtBuscarProvPorNombre = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
         txtCodigoProd = new javax.swing.JTextField();
@@ -335,8 +449,8 @@ public class Sistema extends javax.swing.JFrame {
         btnNuevoProd = new javax.swing.JButton();
         txtIdProd = new javax.swing.JTextField();
         jLabel41 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        txtBuscarProdPorDescripcion = new javax.swing.JTextField();
+        txtBuscarProdPorCodigo = new javax.swing.JTextField();
         jLabel42 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -494,9 +608,22 @@ public class Sistema extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODIGO", "DESCRIPCION", "CANTIDAD", "PRECIO", "TOTAL"
+                "CODIGO", "DESCRIPCION", "PRECIO", "CANTIDAD", "SUBTOTAL"
             }
         ));
+        tblVenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblVentaMouseClicked(evt);
+            }
+        });
+        tblVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblVentaKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblVentaKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblVenta);
         if (tblVenta.getColumnModel().getColumnCount() > 0) {
             tblVenta.getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -539,6 +666,11 @@ public class Sistema extends javax.swing.JFrame {
                 "CODIGO", "DESCRIPCION", "PRECIO", "EXISTENCIA"
             }
         ));
+        tblProductosVenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProductosVentaMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(tblProductosVenta);
         if (tblProductosVenta.getColumnModel().getColumnCount() > 0) {
             tblProductosVenta.getColumnModel().getColumn(0).setPreferredWidth(40);
@@ -556,9 +688,14 @@ public class Sistema extends javax.swing.JFrame {
         jLabel43.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel43.setText("Nombre del cliente");
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
-        jButton2.setText("Agregar");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAgregarProdParaVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
+        btnAgregarProdParaVenta.setText("Agregar");
+        btnAgregarProdParaVenta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAgregarProdParaVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarProdParaVentaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -574,7 +711,7 @@ public class Sistema extends javax.swing.JFrame {
                         .addGap(4, 4, 4)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(btnAgregarProdParaVenta)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnEmininarVenta))
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -621,7 +758,7 @@ public class Sistema extends javax.swing.JFrame {
                             .addComponent(jLabel9))
                         .addGap(24, 24, 24)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
+                            .addComponent(btnAgregarProdParaVenta)
                             .addComponent(btnEmininarVenta))
                         .addGap(67, 67, 67))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -967,12 +1104,22 @@ public class Sistema extends javax.swing.JFrame {
         jLabel39.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel39.setText("Buscar por DNI:");
 
-        jTextField3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProvPorDni.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProvPorDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarProvPorDniKeyReleased(evt);
+            }
+        });
 
         jLabel40.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel40.setText("Buscar por Nombre:");
 
-        jTextField4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProvPorNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProvPorNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarProvPorNombreKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1026,11 +1173,11 @@ public class Sistema extends javax.swing.JFrame {
                         .addGap(67, 67, 67)
                         .addComponent(jLabel39)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscarProvPorDni, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(121, 121, 121)
                         .addComponent(jLabel40)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtBuscarProvPorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -1066,9 +1213,9 @@ public class Sistema extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel39)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscarProvPorDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel40)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBuscarProvPorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1202,12 +1349,22 @@ public class Sistema extends javax.swing.JFrame {
         jLabel41.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel41.setText("Buscar por Descripcion:");
 
-        jTextField5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProdPorDescripcion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProdPorDescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarProdPorDescripcionKeyReleased(evt);
+            }
+        });
 
-        jTextField6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProdPorCodigo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarProdPorCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarProdPorCodigoKeyReleased(evt);
+            }
+        });
 
         jLabel42.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel42.setText("Buscar por CodigoI:");
+        jLabel42.setText("Buscar por Codigo:");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1264,11 +1421,11 @@ public class Sistema extends javax.swing.JFrame {
                                 .addGap(95, 95, 95)
                                 .addComponent(jLabel42)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtBuscarProdPorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(121, 121, 121)
                                 .addComponent(jLabel41)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtBuscarProdPorDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(139, 139, 139)
                                 .addComponent(btnImprimirExcel)))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -1310,9 +1467,9 @@ public class Sistema extends javax.swing.JFrame {
                     .addComponent(btnImprimirExcel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel42)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscarProdPorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel41)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtBuscarProdPorDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1856,6 +2013,82 @@ public class Sistema extends javax.swing.JFrame {
         listarProductosParaVentaPorDescripcion(txtBuscarProductoPorDesc.getText());
     }//GEN-LAST:event_txtBuscarProductoPorDescKeyReleased
 
+    private void txtBuscarProvPorDniKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProvPorDniKeyReleased
+        limpiarTabla();
+        buscarProveedoresPorDni(txtBuscarProvPorDni.getText());
+    }//GEN-LAST:event_txtBuscarProvPorDniKeyReleased
+
+    private void txtBuscarProvPorNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProvPorNombreKeyReleased
+        limpiarTabla();
+        buscarProveedoresPorNombre(txtBuscarProvPorNombre.getText());
+    }//GEN-LAST:event_txtBuscarProvPorNombreKeyReleased
+
+    private void txtBuscarProdPorCodigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProdPorCodigoKeyReleased
+        limpiarTabla();
+        buscarProductosPorCodigo(txtBuscarProdPorCodigo.getText());
+    }//GEN-LAST:event_txtBuscarProdPorCodigoKeyReleased
+
+    private void txtBuscarProdPorDescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProdPorDescripcionKeyReleased
+        limpiarTabla();
+        buscarProductosPorDescripcion(txtBuscarProdPorDescripcion.getText());
+    }//GEN-LAST:event_txtBuscarProdPorDescripcionKeyReleased
+
+    private void tblVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVentaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblVentaMouseClicked
+
+    private void tblProductosVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosVentaMouseClicked
+        int fila = tblProductosVenta.rowAtPoint(evt.getPoint());
+        
+        codigoAux = tblProductosVenta.getValueAt(fila, 0).toString();
+        descripcionAux = tblProductosVenta.getValueAt(fila, 1).toString();
+        precioAux = tblProductosVenta.getValueAt(fila, 2).toString();
+        existenciaAux = tblProductosVenta.getValueAt(fila, 3).toString();
+    }//GEN-LAST:event_tblProductosVentaMouseClicked
+
+    private void btnAgregarProdParaVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProdParaVentaActionPerformed
+         if("".equals(descripcionAux)){
+            JOptionPane.showMessageDialog(null, "Seleccione un producto de la tabla");
+         } else{
+             String codigo = codigoAux;
+             String descripcion = descripcionAux;
+             Double precio = Double.parseDouble(precioAux);
+             int existencia = Integer.parseInt(existenciaAux);
+             
+             item = item + 1;
+             modelo = (DefaultTableModel) tblVenta.getModel();
+             
+             ArrayList lista = new ArrayList();
+             lista.add(item);
+             lista.add(codigo);
+             lista.add(descripcion);
+             lista.add(precio);
+             lista.add(existencia);
+             
+             Object[] obj = new Object[5];
+             obj[0] = lista.get(1);
+             obj[1] = lista.get(2);
+             obj[2] = lista.get(3);
+             obj[3] = 0;
+             obj[4] = 0;
+             modelo.addRow(obj);
+             tblVenta.setModel(modelo);
+             
+             codigoAux = "";
+             descripcionAux = "";
+             precioAux = "";
+             existenciaAux = "";
+         }
+    }//GEN-LAST:event_btnAgregarProdParaVentaActionPerformed
+
+    private void tblVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVentaKeyPressed
+        calcularSubtotal();
+    }//GEN-LAST:event_tblVentaKeyPressed
+
+    private void tblVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVentaKeyReleased
+        calcularSubtotal();
+    }//GEN-LAST:event_tblVentaKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -1896,6 +2129,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizarEmpresa;
     private javax.swing.JButton btnActualizarProd;
     private javax.swing.JButton btnActualizarProveedor;
+    private javax.swing.JButton btnAgregarProdParaVenta;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnConfig;
     private javax.swing.JButton btnEliminarCliente;
@@ -1917,7 +2151,6 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JButton btnVentas;
     private javax.swing.JComboBox<String> cmbProveedor;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1969,10 +2202,6 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JLabel lblTotalPagar;
     private javax.swing.JTable tblCliente;
     private javax.swing.JTable tblProducto;
@@ -1982,7 +2211,11 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTable tblVentas;
     private javax.swing.JTextField txtBuscarCliente;
     private javax.swing.JTextField txtBuscarClientePorDni;
+    private javax.swing.JTextField txtBuscarProdPorCodigo;
+    private javax.swing.JTextField txtBuscarProdPorDescripcion;
     private javax.swing.JTextField txtBuscarProductoPorDesc;
+    private javax.swing.JTextField txtBuscarProvPorDni;
+    private javax.swing.JTextField txtBuscarProvPorNombre;
     private javax.swing.JTextField txtCantidadProd;
     private javax.swing.JTextField txtCodigoProd;
     private javax.swing.JTextField txtCorreoCliente;

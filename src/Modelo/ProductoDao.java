@@ -247,6 +247,85 @@ public class ProductoDao {
     
     }
     
+    //Devuelve lista de clientes de la DB
+    public List buscarProductosPorDescripcion(String cadena){
+        List<Producto> listaProducto = new ArrayList();
+        String consultaSQL = "SELECT * FROM productos WHERE estado = 1 AND descripcion like '%" + cadena + "%' order by descripcion";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Producto prod = new Producto();
+                
+                //cargamos el objeto producto
+                prod.setId_producto(rs.getInt("id_producto"));
+                prod.setCodigo(rs.getString("codigo"));
+                prod.setDescripcion(rs.getString("descripcion"));
+                prod.setPrecio_costo(rs.getDouble("precio_costo"));
+                prod.setPrecio_venta(rs.getDouble("precio_venta"));
+                prod.setCantidad(rs.getInt("cantidad"));
+                prod.setProveedor(rs.getString("proveedor"));
+                
+                //Agregamos cliente a la lista
+                listaProducto.add(prod);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaProducto;
+    }
+    
+    //Devuelve lista de clientes de la DB
+    public List buscarProductosPorCodigo(String cadena){
+        List<Producto> listaProducto = new ArrayList();
+        String consultaSQL = "SELECT * FROM productos WHERE estado = 1 AND codigo like '%" + cadena + "%' order by descripcion";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Producto prod = new Producto();
+                
+                //cargamos el objeto producto
+                prod.setId_producto(rs.getInt("id_producto"));
+                prod.setCodigo(rs.getString("codigo"));
+                prod.setDescripcion(rs.getString("descripcion"));
+                prod.setPrecio_costo(rs.getDouble("precio_costo"));
+                prod.setPrecio_venta(rs.getDouble("precio_venta"));
+                prod.setCantidad(rs.getInt("cantidad"));
+                prod.setProveedor(rs.getString("proveedor"));
+                
+                //Agregamos cliente a la lista
+                listaProducto.add(prod);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaProducto;
+    }
+    
+    /*
     public Producto buscarProductoPorId(int id_producto){
         Producto prod = new Producto();
         String consultaSQL = "SELECT * FROM productos WHERE id_producto = ?";
@@ -302,5 +381,6 @@ public class ProductoDao {
         }
         return prod;
     }
+*/
     
 } //Fin clase principal
