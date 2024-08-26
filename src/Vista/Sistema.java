@@ -4,9 +4,11 @@ package Vista;
 import Entidad.Cliente;
 import Entidad.Proveedor;
 import Entidad.Producto;
+import Entidad.Venta;
 import Modelo.ClienteDao;
 import Modelo.ProveedorDao;
 import Modelo.ProductoDao;
+import Modelo.VentaDao;
 import Reportes.ExcelProductos;
 import Reportes.ExportarExcel;
 import java.awt.event.KeyEvent;
@@ -28,8 +30,12 @@ public class Sistema extends javax.swing.JFrame {
     ProveedorDao provDao = new ProveedorDao();
     Producto prod = new Producto();
     ProductoDao prodDao = new ProductoDao();
+    Venta vta = new Venta();
+    VentaDao vtaDao = new VentaDao();
     DefaultTableModel modelo = new DefaultTableModel();
+    DefaultTableModel modelo2 = new DefaultTableModel();
     int item = 0;
+    double total = 0.00;
     
     String codigoAux = "";
     String descripcionAux = "";
@@ -303,10 +309,18 @@ public class Sistema extends javax.swing.JFrame {
     }
 
     
-    //Metodo para limpiar la tabla clientes
+    //Metodo para limpiar las tablas
     public void limpiarTabla(){
         for(int i = 0; i < modelo.getRowCount(); i++){
             modelo.removeRow(i);
+            i = i - 1;
+        }
+    }
+    
+    //Metodo para limpiar la tabla clientes
+    public void limpiarTablaVentas(){
+        for(int i = 0; i < modelo2.getRowCount(); i++){
+            modelo2.removeRow(i);
             i = i - 1;
         }
     }
@@ -338,6 +352,27 @@ public class Sistema extends javax.swing.JFrame {
         //prodDao.consultarProveedor(cmbProveedor);
 
     }
+    
+    private void totalPagar(){
+        total = 0.00;
+        int numFila = tblVenta.getRowCount(); //Obtenemos la cantidad de filas de la tabla
+        //recorremos la tabla
+        for(int i = 0; i < numFila; i++){
+            double calc = Double.parseDouble(String.valueOf(tblVenta.getModel().getValueAt(i, 4)));
+            total = total + calc;
+        }
+        lblTotalPagar.setText(String.format("%.2f", total));
+        
+    }
+    
+    /*
+    private void registarVenta(){
+        String cliente = txtNombreClienteVenta.getText();
+        String vendedor = lblVendedor.getText();
+        double total = 
+    
+    }
+    */
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -357,6 +392,7 @@ public class Sistema extends javax.swing.JFrame {
         btnConfig = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        lblVendedor = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
@@ -543,6 +579,8 @@ public class Sistema extends javax.swing.JFrame {
             }
         });
 
+        lblVendedor.setText("Vendedor");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -555,22 +593,30 @@ public class Sistema extends javax.swing.JFrame {
                     .addComponent(btnProductos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnVentas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnConfig, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addContainerGap())
+                .addGap(0, 3, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(jButton1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblVendedor)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblVendedor)
+                .addGap(10, 10, 10)
                 .addComponent(btnNuevaVenta)
                 .addGap(32, 32, 32)
                 .addComponent(btnClientes)
@@ -665,7 +711,15 @@ public class Sistema extends javax.swing.JFrame {
             new String [] {
                 "CODIGO", "DESCRIPCION", "PRECIO", "EXISTENCIA"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblProductosVenta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblProductosVentaMouseClicked(evt);
@@ -749,9 +803,9 @@ public class Sistema extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBuscarProductoPorDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -762,6 +816,7 @@ public class Sistema extends javax.swing.JFrame {
                             .addComponent(btnEmininarVenta))
                         .addGap(67, 67, 67))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1949,7 +2004,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnActualizarProdActionPerformed
 
     private void btnImprimirExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirExcelActionPerformed
-        /*
+        
         ExportarExcel obj;
 
         try {
@@ -1958,9 +2013,8 @@ public class Sistema extends javax.swing.JFrame {
         } catch (IOException ex) {
             System.out.println("Error: " + ex);
         }
-        */
         
-        ExcelProductos.reporte();
+        //ExcelProductos.reporte();
     }//GEN-LAST:event_btnImprimirExcelActionPerformed
 
     private void btnImprimirExcelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImprimirExcelMouseClicked
@@ -2035,6 +2089,7 @@ public class Sistema extends javax.swing.JFrame {
 
     private void tblVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVentaMouseClicked
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_tblVentaMouseClicked
 
     private void tblProductosVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosVentaMouseClicked
@@ -2056,7 +2111,7 @@ public class Sistema extends javax.swing.JFrame {
              int existencia = Integer.parseInt(existenciaAux);
              
              item = item + 1;
-             modelo = (DefaultTableModel) tblVenta.getModel();
+             modelo2 = (DefaultTableModel) tblVenta.getModel();
              
              ArrayList lista = new ArrayList();
              lista.add(item);
@@ -2071,22 +2126,25 @@ public class Sistema extends javax.swing.JFrame {
              obj[2] = lista.get(3);
              obj[3] = 0;
              obj[4] = 0;
-             modelo.addRow(obj);
-             tblVenta.setModel(modelo);
+             modelo2.addRow(obj);
+             tblVenta.setModel(modelo2);
              
              codigoAux = "";
              descripcionAux = "";
              precioAux = "";
              existenciaAux = "";
          }
+         
     }//GEN-LAST:event_btnAgregarProdParaVentaActionPerformed
 
     private void tblVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVentaKeyPressed
         calcularSubtotal();
+        totalPagar();
     }//GEN-LAST:event_tblVentaKeyPressed
 
     private void tblVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVentaKeyReleased
         calcularSubtotal();
+        totalPagar();
     }//GEN-LAST:event_tblVentaKeyReleased
 
     /**
@@ -2203,6 +2261,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblTotalPagar;
+    private javax.swing.JLabel lblVendedor;
     private javax.swing.JTable tblCliente;
     private javax.swing.JTable tblProducto;
     private javax.swing.JTable tblProductosVenta;

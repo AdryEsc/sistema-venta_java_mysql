@@ -38,7 +38,7 @@ public class ClienteDao {
             
             return true;
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.toString());
+            System.out.println(e.toString());
             return false;
         } finally {
             try {
