@@ -408,7 +408,7 @@ public class Sistema extends javax.swing.JFrame {
         txtTelefonoClienteVenta = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtDireccionClienteVenta = new javax.swing.JTextField();
-        txtRazonClienteVenta = new javax.swing.JTextField();
+        txtCorreoClienteVenta = new javax.swing.JTextField();
         txtIdProducto = new javax.swing.JTextField();
         jScrollPane6 = new javax.swing.JScrollPane();
         tblProductosVenta = new javax.swing.JTable();
@@ -648,6 +648,11 @@ public class Sistema extends javax.swing.JFrame {
         btnEmininarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEmininarVenta.setText("Eliminar");
         btnEmininarVenta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEmininarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmininarVentaActionPerformed(evt);
+            }
+        });
 
         tblVenta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -683,6 +688,11 @@ public class Sistema extends javax.swing.JFrame {
         jLabel9.setText("Buscar:");
 
         txtDniCuitVenta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtDniCuitVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDniCuitVentaKeyPressed(evt);
+            }
+        });
 
         txtNombreClienteVenta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -791,7 +801,7 @@ public class Sistema extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addComponent(txtDireccionClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtRazonClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCorreoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(txtTelefonoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(55, 55, 55)
@@ -838,7 +848,7 @@ public class Sistema extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtDireccionClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtRazonClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtCorreoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -2147,6 +2157,31 @@ public class Sistema extends javax.swing.JFrame {
         totalPagar();
     }//GEN-LAST:event_tblVentaKeyReleased
 
+    private void btnEmininarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmininarVentaActionPerformed
+        modelo2 = (DefaultTableModel) tblVenta.getModel();
+        modelo2.removeRow(tblVenta.getSelectedRow());
+        totalPagar();
+        txtBuscarProductoPorDesc.requestFocus();
+    }//GEN-LAST:event_btnEmininarVentaActionPerformed
+
+    private void txtDniCuitVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniCuitVentaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){   //Verificamos que la tecla enter fue seleccionada
+            if(!"".equals(txtDniCuitVenta.getText())){   //Verificamos que el campo dni no este vacio
+                long dni_cuit = Long.parseLong(txtDniCuitVenta.getText());
+                cl = clDao.buscarClienteParaVenta(dni_cuit);
+                if(cl.getNombre() != null){   //Verificamos si trae resultado
+                    txtNombreClienteVenta.setText(""+cl.getNombre());
+                    txtTelefonoClienteVenta.setText(""+cl.getTelefono());
+                    txtDireccionClienteVenta.setText(""+cl.getDireccion());
+                    txtCorreoClienteVenta.setText(""+cl.getCorreo());
+                } else {
+                    JOptionPane.showMessageDialog(null, "El cliente no existe");
+                    txtDniCuitVenta.setText("");
+                }
+            }
+        }
+    }//GEN-LAST:event_txtDniCuitVentaKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -2278,6 +2313,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTextField txtCantidadProd;
     private javax.swing.JTextField txtCodigoProd;
     private javax.swing.JTextField txtCorreoCliente;
+    private javax.swing.JTextField txtCorreoClienteVenta;
     private javax.swing.JTextField txtCorreoEmpresa;
     private javax.swing.JTextField txtCorreoProveedor;
     private javax.swing.JTextField txtCuitEmpresa;
@@ -2301,7 +2337,6 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTextField txtPrecioCostoProd;
     private javax.swing.JTextField txtPrecioVentaProd;
     private javax.swing.JTextField txtRazonCliente;
-    private javax.swing.JTextField txtRazonClienteVenta;
     private javax.swing.JTextField txtRazonEmpresa;
     private javax.swing.JTextField txtRazonProveedor;
     private javax.swing.JTextField txtTelefonoCliente;

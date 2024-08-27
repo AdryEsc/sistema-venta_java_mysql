@@ -320,7 +320,7 @@
                                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                       <Component id="txtDireccionClienteVenta" min="-2" pref="34" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="txtRazonClienteVenta" alignment="0" min="-2" pref="33" max="-2" attributes="0"/>
+                                  <Component id="txtCorreoClienteVenta" alignment="0" min="-2" pref="33" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Component id="txtTelefonoClienteVenta" min="-2" pref="31" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
@@ -381,7 +381,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="txtDireccionClienteVenta" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtRazonClienteVenta" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtCorreoClienteVenta" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -411,6 +411,9 @@
                   <Color id="Hand Cursor"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEmininarVentaActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
               <AuxValues>
@@ -487,6 +490,9 @@
                   </Border>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDniCuitVentaKeyPressed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNombreClienteVenta">
               <Properties>
@@ -536,7 +542,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtDireccionClienteVenta">
             </Component>
-            <Component class="javax.swing.JTextField" name="txtRazonClienteVenta">
+            <Component class="javax.swing.JTextField" name="txtCorreoClienteVenta">
             </Component>
             <Component class="javax.swing.JTextField" name="txtIdProducto">
             </Component>
