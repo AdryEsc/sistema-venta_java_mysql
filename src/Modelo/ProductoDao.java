@@ -128,7 +128,7 @@ public class ProductoDao {
                 Producto prod = new Producto();
                 
                 //cargamos el objeto producto
-                //prod.setId_producto(rs.getInt("id_producto"));
+                prod.setId_producto(rs.getInt("id_producto"));
                 prod.setCodigo(rs.getString("codigo"));
                 prod.setDescripcion(rs.getString("descripcion"));
                 //prod.setPrecio_costo(rs.getDouble("precio_costo"));

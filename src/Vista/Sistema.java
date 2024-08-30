@@ -37,14 +37,15 @@ public class Sistema extends javax.swing.JFrame {
     int item = 0;
     double total = 0.00;
     
+    String idProducto = "";
     String codigoAux = "";
     String descripcionAux = "";
     String precioAux = "";
     String existenciaAux = "";
     
-    private static final int COLUMNA_CANTIDAD = 3;
-    private static final int COLUMNA_PRECIO = 2;
-    private static final int COLUMNA_SUBTOTAL = 4;
+    private static final int COLUMNA_PRECIO = 3;
+    private static final int COLUMNA_CANTIDAD = 4;
+    private static final int COLUMNA_SUBTOTAL = 5;
     
     
     /**
@@ -271,15 +272,15 @@ public class Sistema extends javax.swing.JFrame {
     public void listarProductosParaVenta(){
         List<Producto> listarProd = prodDao.listarProductosParaVenta();    //metodo de ClientaDao
         modelo = (DefaultTableModel) tblProductosVenta.getModel();
-        Object[] obj = new Object[4];
+        Object[] obj = new Object[5];
         
         for(int i = 0; i < listarProd.size(); i++){
-            //obj[0] = listarProd.get(i).getId_producto();
-            obj[0] = listarProd.get(i).getCodigo();
-            obj[1] = listarProd.get(i).getDescripcion();
+            obj[0] = listarProd.get(i).getId_producto();
+            obj[1] = listarProd.get(i).getCodigo();
+            obj[2] = listarProd.get(i).getDescripcion();
             //obj[3] = listarProd.get(i).getPrecio_costo();
-            obj[2] = listarProd.get(i).getPrecio_venta();
-            obj[3] = listarProd.get(i).getCantidad();
+            obj[3] = listarProd.get(i).getPrecio_venta();
+            obj[4] = listarProd.get(i).getCantidad();
             //obj[6] = listarProd.get(i).getProveedor();
             
             modelo.addRow(obj);
@@ -358,7 +359,7 @@ public class Sistema extends javax.swing.JFrame {
         int numFila = tblVenta.getRowCount(); //Obtenemos la cantidad de filas de la tabla
         //recorremos la tabla
         for(int i = 0; i < numFila; i++){
-            double calc = Double.parseDouble(String.valueOf(tblVenta.getModel().getValueAt(i, 4)));
+            double calc = Double.parseDouble(String.valueOf(tblVenta.getModel().getValueAt(i, 5)));
             total = total + calc;
         }
         txtTotalPagar.setText(""+total);
@@ -382,7 +383,7 @@ public class Sistema extends javax.swing.JFrame {
         int numFila = tblVenta.getRowCount(); //Obtenemos la cantidad de filas de la tabla
         //recorremos la tabla
         for(int i = 0; i < numFila; i++){
-            double calc = Double.parseDouble(String.valueOf(tblVenta.getModel().getValueAt(i, 4)));
+            double calc = Double.parseDouble(String.valueOf(tblVenta.getModel().getValueAt(i, 5)));
             if(calc == 0){
                 verif = true;
             }  
@@ -677,7 +678,7 @@ public class Sistema extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODIGO", "DESCRIPCION", "PRECIO", "CANTIDAD", "SUBTOTAL"
+                "ID PRODUCTO", "CODIGO", "DESCRIPCION", "PRECIO", "CANTIDAD", "SUBTOTAL"
             }
         ));
         tblVenta.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -695,11 +696,12 @@ public class Sistema extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblVenta);
         if (tblVenta.getColumnModel().getColumnCount() > 0) {
-            tblVenta.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tblVenta.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblVenta.getColumnModel().getColumn(2).setPreferredWidth(50);
+            tblVenta.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tblVenta.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tblVenta.getColumnModel().getColumn(2).setPreferredWidth(150);
             tblVenta.getColumnModel().getColumn(3).setPreferredWidth(50);
             tblVenta.getColumnModel().getColumn(4).setPreferredWidth(50);
+            tblVenta.getColumnModel().getColumn(5).setPreferredWidth(50);
         }
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -743,11 +745,11 @@ public class Sistema extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODIGO", "DESCRIPCION", "PRECIO", "EXISTENCIA"
+                "ID PRODUCTO", "CODIGO", "DESCRIPCION", "PRECIO", "EXISTENCIA"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                true, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -761,10 +763,11 @@ public class Sistema extends javax.swing.JFrame {
         });
         jScrollPane6.setViewportView(tblProductosVenta);
         if (tblProductosVenta.getColumnModel().getColumnCount() > 0) {
-            tblProductosVenta.getColumnModel().getColumn(0).setPreferredWidth(40);
-            tblProductosVenta.getColumnModel().getColumn(1).setPreferredWidth(150);
-            tblProductosVenta.getColumnModel().getColumn(2).setPreferredWidth(30);
+            tblProductosVenta.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblProductosVenta.getColumnModel().getColumn(1).setPreferredWidth(40);
+            tblProductosVenta.getColumnModel().getColumn(2).setPreferredWidth(150);
             tblProductosVenta.getColumnModel().getColumn(3).setPreferredWidth(30);
+            tblProductosVenta.getColumnModel().getColumn(4).setPreferredWidth(40);
         }
 
         txtBuscarProductoPorDesc.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -809,31 +812,35 @@ public class Sistema extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addComponent(txtDireccionClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGenerarVenta)
                         .addGap(39, 39, 39)
                         .addComponent(jLabel10)
                         .addGap(3, 3, 3)
                         .addComponent(txtTotalPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 858, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblTotalPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(23, 23, 23))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnAgregarProdParaVenta)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnEmininarVenta))
+                                .addGap(559, 559, 559)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtBuscarProductoPorDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnAgregarProdParaVenta)
+                                    .addComponent(txtBuscarProductoPorDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtIdProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(txtIdProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnEmininarVenta)
+                                .addGap(8, 8, 8)))))
                 .addGap(20, 20, 20))
         );
         jPanel2Layout.setVerticalGroup(
@@ -846,11 +853,11 @@ public class Sistema extends javax.swing.JFrame {
                             .addComponent(txtIdProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBuscarProductoPorDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAgregarProdParaVenta)
                         .addGap(24, 24, 24)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAgregarProdParaVenta)
-                            .addComponent(btnEmininarVenta))
-                        .addGap(67, 67, 67))
+                        .addComponent(btnEmininarVenta)
+                        .addGap(18, 18, 18))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2135,16 +2142,18 @@ public class Sistema extends javax.swing.JFrame {
     private void tblProductosVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosVentaMouseClicked
         int fila = tblProductosVenta.rowAtPoint(evt.getPoint());
         
-        codigoAux = tblProductosVenta.getValueAt(fila, 0).toString();
-        descripcionAux = tblProductosVenta.getValueAt(fila, 1).toString();
-        precioAux = tblProductosVenta.getValueAt(fila, 2).toString();
-        existenciaAux = tblProductosVenta.getValueAt(fila, 3).toString();
+        idProducto = tblProductosVenta.getValueAt(fila, 0).toString();
+        codigoAux = tblProductosVenta.getValueAt(fila, 1).toString();
+        descripcionAux = tblProductosVenta.getValueAt(fila, 2).toString();
+        precioAux = tblProductosVenta.getValueAt(fila, 3).toString();
+        existenciaAux = tblProductosVenta.getValueAt(fila, 4).toString();
     }//GEN-LAST:event_tblProductosVentaMouseClicked
 
     private void btnAgregarProdParaVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProdParaVentaActionPerformed
          if("".equals(descripcionAux)){
             JOptionPane.showMessageDialog(null, "Seleccione un producto de la tabla");
          } else{
+             int idP = Integer.parseInt(idProducto);
              String codigo = codigoAux;
              String descripcion = descripcionAux;
              Double precio = Double.parseDouble(precioAux);
@@ -2155,17 +2164,19 @@ public class Sistema extends javax.swing.JFrame {
              
              ArrayList lista = new ArrayList();
              lista.add(item);
+             lista.add(idP);
              lista.add(codigo);
              lista.add(descripcion);
              lista.add(precio);
              lista.add(existencia);
              
-             Object[] obj = new Object[5];
+             Object[] obj = new Object[6];
              obj[0] = lista.get(1);
              obj[1] = lista.get(2);
              obj[2] = lista.get(3);
-             obj[3] = 0;
+             obj[3] = lista.get(4);
              obj[4] = 0;
+             obj[5] = 0;
              modelo2.addRow(obj);
              tblVenta.setModel(modelo2);
              
