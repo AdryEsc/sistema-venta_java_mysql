@@ -334,7 +334,6 @@
                                       <Component id="txtIdProducto" min="-2" pref="29" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="btnEmininarVenta" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                   </Group>
@@ -442,12 +441,12 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="6" rowCount="0">
-                        <Column editable="true" title="ID PRODUCTO" type="java.lang.Object"/>
-                        <Column editable="true" title="CODIGO" type="java.lang.Object"/>
-                        <Column editable="true" title="DESCRIPCION" type="java.lang.Object"/>
-                        <Column editable="true" title="PRECIO" type="java.lang.Object"/>
+                        <Column editable="false" title="ID PRODUCTO" type="java.lang.Object"/>
+                        <Column editable="false" title="CODIGO" type="java.lang.Object"/>
+                        <Column editable="false" title="DESCRIPCION" type="java.lang.Object"/>
+                        <Column editable="false" title="PRECIO" type="java.lang.Object"/>
                         <Column editable="true" title="CANTIDAD" type="java.lang.Object"/>
-                        <Column editable="true" title="SUBTOTAL" type="java.lang.Object"/>
+                        <Column editable="false" title="SUBTOTAL" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -583,7 +582,7 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="5" rowCount="0">
-                        <Column editable="true" title="ID PRODUCTO" type="java.lang.Object"/>
+                        <Column editable="false" title="ID PRODUCTO" type="java.lang.Object"/>
                         <Column editable="false" title="CODIGO" type="java.lang.Object"/>
                         <Column editable="false" title="DESCRIPCION" type="java.lang.Object"/>
                         <Column editable="false" title="PRECIO" type="java.lang.Object"/>

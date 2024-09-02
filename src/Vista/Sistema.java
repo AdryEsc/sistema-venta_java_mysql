@@ -292,15 +292,15 @@ public class Sistema extends javax.swing.JFrame {
     public void listarProductosParaVentaPorDescripcion(String cadena){
         List<Producto> listarProd = prodDao.listarProductosParaVentaPorDescripcion(cadena);    //metodo de ClientaDao
         modelo = (DefaultTableModel) tblProductosVenta.getModel();
-        Object[] obj = new Object[4];
+        Object[] obj = new Object[5];
         
         for(int i = 0; i < listarProd.size(); i++){
-            //obj[0] = listarProd.get(i).getId_producto();
-            obj[0] = listarProd.get(i).getCodigo();
-            obj[1] = listarProd.get(i).getDescripcion();
+            obj[0] = listarProd.get(i).getId_producto();
+            obj[1] = listarProd.get(i).getCodigo();
+            obj[2] = listarProd.get(i).getDescripcion();
             //obj[3] = listarProd.get(i).getPrecio_costo();
-            obj[2] = listarProd.get(i).getPrecio_venta();
-            obj[3] = listarProd.get(i).getCantidad();
+            obj[3] = listarProd.get(i).getPrecio_venta();
+            obj[4] = listarProd.get(i).getCantidad();
             //obj[6] = listarProd.get(i).getProveedor();
             
             modelo.addRow(obj);
@@ -376,6 +376,15 @@ public class Sistema extends javax.swing.JFrame {
         vta.setVendedor(vendedor);
         vta.setTotal(totalP);
         vtaDao.registrarVenta(vta);
+    }
+    
+    private void registrarDetalleVenta(){
+        for(int i = 0; i < tblVenta.getRowCount(); i++){
+            int idProducto = Integer.parseInt(tblVenta.getValueAt(i, 0).toString());
+            int cantidad = Integer.parseInt(tblVenta.getValueAt(i, 1).toString());
+            double subTotal = Double.parseDouble(tblVenta.getValueAt(i, 2).toString());
+            
+        }
     }
     
     private boolean verificarPrecioSubtotalCero(){
@@ -680,7 +689,15 @@ public class Sistema extends javax.swing.JFrame {
             new String [] {
                 "ID PRODUCTO", "CODIGO", "DESCRIPCION", "PRECIO", "CANTIDAD", "SUBTOTAL"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblVenta.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblVentaMouseClicked(evt);
@@ -749,7 +766,7 @@ public class Sistema extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -838,7 +855,6 @@ public class Sistema extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtIdProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnEmininarVenta)
                                 .addGap(8, 8, 8)))))
                 .addGap(20, 20, 20))
@@ -2185,8 +2201,18 @@ public class Sistema extends javax.swing.JFrame {
              precioAux = "";
              existenciaAux = "";
              
-             txtBuscarProductoPorDesc.requestFocus();
-         }
+             //txtBuscarProductoPorDesc.requestFocus();
+             
+             int numFila = tblVenta.getRowCount(); //Obtenemos la cantidad de filas de la tabla
+             int contador = 0;
+             //recorremos la tabla
+             for(int i = 0; i < numFila; i++){
+                 contador++;
+             }
+             tblVenta.getSelectionModel().setSelectionInterval(contador - 1, contador - 1);
+             limpiarTabla();
+             listarProductosParaVentaPorDescripcion(txtBuscarProductoPorDesc.getText());
+        }
          
     }//GEN-LAST:event_btnAgregarProdParaVentaActionPerformed
 
