@@ -50,6 +50,33 @@ public class VentaDao {
         return resp;
     }
     
+    //Inserta venta en el base de datos
+    public int obtenerMaxIdVenta(){
+        int idVenta = 0;
+        String consultaSQL = "SELECT MAX(id_venta) FROM ventas";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+                idVenta = rs.getInt(1);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return idVenta;
+    }
+    
     //Inserta detalle de venta en la base de datos
     public int registrarVentaDetalle(VentaDetalle vtaDetalle){
         String consultaSQL = "INSERT INTO venta_detalle (id_producto, cantidad, subTotal, id_venta) VALUES (?,?,?,?)";
