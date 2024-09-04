@@ -325,7 +325,6 @@ public class ProductoDao {
         return listaProducto;
     }
     
-    /*
     public Producto buscarProductoPorId(int id_producto){
         Producto prod = new Producto();
         String consultaSQL = "SELECT * FROM productos WHERE id_producto = ?";
@@ -337,9 +336,14 @@ public class ProductoDao {
             rs = ps.executeQuery();
             
             if(rs.next()){
+                prod.setId_producto(rs.getInt("id_producto"));
+                prod.setCodigo(rs.getString("codigo"));
                 prod.setDescripcion(rs.getString("descripcion"));
+                prod.setPrecio_costo(rs.getDouble("precio_costo"));
                 prod.setPrecio_venta(rs.getDouble("precio_venta"));
                 prod.setCantidad(rs.getInt("cantidad"));
+                prod.setProveedor(rs.getString("proveedor"));
+                
             }
             
         } catch (SQLException e) {
@@ -353,34 +357,5 @@ public class ProductoDao {
         }
         return prod;
     }
-    
-    public Producto buscarProductoPorCodido(String codigo){
-        Producto prod = new Producto();
-        String consultaSQL = "SELECT * FROM productos WHERE codigo = ?";
-        
-        try {
-            conn = conex.getConnection();
-            ps = conn.prepareStatement(consultaSQL);
-            ps.setString(1, codigo);   //pasamos el valor al ? de la consulta
-            rs = ps.executeQuery();
-            
-            if(rs.next()){
-                prod.setDescripcion(rs.getString("descripcion"));
-                prod.setPrecio_venta(rs.getDouble("precio_venta"));
-                prod.setCantidad(rs.getInt("cantidad"));
-            }
-            
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException ex){
-                System.out.println(ex.toString());
-            }
-        }
-        return prod;
-    }
-*/
     
 } //Fin clase principal

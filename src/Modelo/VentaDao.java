@@ -110,4 +110,32 @@ public class VentaDao {
         return resp;
     }
     
+    public boolean actualizarStock(int id_producto, int cant){
+        String consultaSQL = "UPDATE productos SET cantidad = ? WHERE id_producto = ?";
+        
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            
+            /* Pasamos los valores (?) en la consulta */
+            ps.setInt(1, cant);
+            ps.setInt(2, id_producto);
+            
+            //Ejecutamos consulta
+            ps.execute();
+            
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+    }
+    
 } //Fin clase pricipal
