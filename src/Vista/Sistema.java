@@ -12,9 +12,22 @@ import Modelo.ProductoDao;
 import Modelo.VentaDao;
 import Reportes.ExcelProductos;
 import Reportes.ExportarExcel;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -68,6 +81,8 @@ public class Sistema extends javax.swing.JFrame {
         
         //txtIdV.setEditable(false);
         txtIdV.setText(String.valueOf(vtaDao.obtenerMaxIdVenta() + 1));
+        
+        pdfVenta();
         
     }
     
@@ -434,6 +449,51 @@ public class Sistema extends javax.swing.JFrame {
         txtTelefonoClienteVenta.setText("");
         txtDireccionClienteVenta.setText("");
         txtCorreoClienteVenta.setText("");
+    }
+    
+    private void pdfVenta(){
+        try{
+            FileOutputStream archivo;
+            File file = new File("src/Pdf/venta.pdf");
+            archivo = new FileOutputStream(file);
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, archivo);
+            doc.open();
+            
+            Image imagen = Image.getInstance("src/Img/logo_espectro_pdf.png");
+            Paragraph fecha = new Paragraph();
+            Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLUE);
+            fecha.add(Chunk.NEWLINE);
+            Date date = new Date();
+            fecha.add("Factura N°: 1" + "\nFecha: " + new SimpleDateFormat("dd/mm/yyyy").format(date) + "\n\n");
+            
+            PdfPTable encabezado = new PdfPTable(4);
+            encabezado.setWidthPercentage(100);
+            encabezado.getDefaultCell().setBorder(0);
+            float[] columnaEncabezado = new float[]{20f, 30f, 70f, 40f};
+            encabezado.setWidths(columnaEncabezado);
+            encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
+            
+            encabezado.addCell(imagen);
+            encabezado.addCell("");
+            
+            String cuit = "20336369534";
+            String nombre = "Adrian Escalante";
+            String telefono = "3794673221";
+            String direccion = "Teniente Ibañez y Mendoza";
+            String razonSocial = "Espectro Sistemas";
+            
+            encabezado.addCell("Nombre: " + nombre + "\nRazon Social: " + razonSocial + "\nCuit: " + cuit + "\nDirección: " + direccion + "\nTelefono: " + telefono);
+            
+            encabezado.addCell(fecha);
+            
+            doc.add(encabezado);
+            
+            doc.close();
+            archivo.close();
+        }catch(Exception e){
+        
+        }
     }
     
 
