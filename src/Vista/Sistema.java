@@ -19,6 +19,8 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.event.KeyEvent;
@@ -27,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -81,8 +84,6 @@ public class Sistema extends javax.swing.JFrame {
         
         //txtIdV.setEditable(false);
         txtIdV.setText(String.valueOf(vtaDao.obtenerMaxIdVenta() + 1));
-        
-        pdfVenta();
         
     }
     
@@ -460,17 +461,19 @@ public class Sistema extends javax.swing.JFrame {
             PdfWriter.getInstance(doc, archivo);
             doc.open();
             
+            //Realizamos el encabezado de la venta
             Image imagen = Image.getInstance("src/Img/logo_espectro_pdf.png");
             Paragraph fecha = new Paragraph();
             Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLUE);
             fecha.add(Chunk.NEWLINE);
             Date date = new Date();
-            fecha.add("Factura N°: 1" + "\nFecha: " + new SimpleDateFormat("dd/mm/yyyy").format(date) + "\n\n");
+            //Calendar fechaActual = Calendar.getInstance();
+            fecha.add("Factura N°: 1" + "\nFecha: " + new SimpleDateFormat("dd-mm-yyyy").format(date) + "\n\n");
             
             PdfPTable encabezado = new PdfPTable(4);
             encabezado.setWidthPercentage(100);
             encabezado.getDefaultCell().setBorder(0);
-            float[] columnaEncabezado = new float[]{20f, 30f, 70f, 40f};
+            float[] columnaEncabezado = new float[]{20f, 20f, 70f, 40f};
             encabezado.setWidths(columnaEncabezado);
             encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
             
@@ -488,6 +491,81 @@ public class Sistema extends javax.swing.JFrame {
             encabezado.addCell(fecha);
             
             doc.add(encabezado);
+            
+            //Realizamos la parte que muestra los datos del cliente
+            Paragraph cli = new Paragraph();
+            cli.add(Chunk.NEWLINE);
+            cli.add("Datos del cliente " + "\n\n");
+            doc.add(cli);
+            
+            PdfPTable datosCli = new PdfPTable(4);
+            datosCli.setWidthPercentage(100);
+            datosCli.getDefaultCell().setBorder(0);
+            float[] columnaCli = new float[]{25f, 50f, 30f, 40f};
+            datosCli.setWidths(columnaCli);
+            datosCli.setHorizontalAlignment(Element.ALIGN_LEFT);
+            PdfPCell cl1 = new PdfPCell(new Phrase("DNI/CUIT", negrita));
+            PdfPCell cl2 = new PdfPCell(new Phrase("Nombre", negrita));
+            PdfPCell cl3 = new PdfPCell(new Phrase("Telefono", negrita));
+            PdfPCell cl4 = new PdfPCell(new Phrase("Dirección", negrita));
+            cl1.setBorder(0);
+            cl2.setBorder(0);
+            cl3.setBorder(0);
+            cl4.setBorder(0);
+            datosCli.addCell(cl1);
+            datosCli.addCell(cl2);
+            datosCli.addCell(cl3);
+            datosCli.addCell(cl4);
+            datosCli.addCell(txtDniCuitVenta.getText());
+            datosCli.addCell(txtNombreClienteVenta.getText());
+            datosCli.addCell(txtTelefonoClienteVenta.getText());
+            datosCli.addCell(txtDireccionClienteVenta.getText());
+            
+            doc.add(datosCli);
+            
+            //Realizamos la parte que muestra los productos vendidos
+            PdfPTable tablaProd = new PdfPTable(6);
+            tablaProd.setWidthPercentage(100);
+            tablaProd.getDefaultCell().setBorder(0);
+            float[] columnaProd = new float[]{20f, 20f, 50f, 20f, 20f, 20f};
+            tablaProd.setWidths(columnaProd);
+            tablaProd.setHorizontalAlignment(Element.ALIGN_LEFT);
+            PdfPCell prod1 = new PdfPCell(new Phrase("ID", negrita));
+            PdfPCell prod2 = new PdfPCell(new Phrase("Codigo", negrita));
+            PdfPCell prod3 = new PdfPCell(new Phrase("Descripción", negrita));
+            PdfPCell prod4 = new PdfPCell(new Phrase("Precio", negrita));
+            PdfPCell prod5 = new PdfPCell(new Phrase("Cantidad", negrita));
+            PdfPCell prod6 = new PdfPCell(new Phrase("Subtotal", negrita));
+            prod1.setBorder(0);
+            prod2.setBorder(0);
+            prod3.setBorder(0);
+            prod4.setBorder(0);
+            prod5.setBorder(0);
+            prod6.setBorder(0);
+            tablaProd.addCell(prod1);
+            tablaProd.addCell(prod2);
+            tablaProd.addCell(prod3);
+            tablaProd.addCell(prod4);
+            tablaProd.addCell(prod5);
+            tablaProd.addCell(prod6);
+            
+            for(int i = 0; i < tblVenta.getRowCount(); i++){
+                String id = tblVenta.getValueAt(i, 0).toString();
+                String codigo = tblVenta.getValueAt(i, 1).toString();
+                String descripcion = tblVenta.getValueAt(i, 2).toString();
+                String precio = tblVenta.getValueAt(i, 3).toString();
+                String cantidad = tblVenta.getValueAt(i, 4).toString();
+                String subtotal = tblVenta.getValueAt(i, 5).toString();
+                
+                tablaProd.addCell(id);
+                tablaProd.addCell(codigo);
+                tablaProd.addCell(descripcion);
+                tablaProd.addCell(precio);
+                tablaProd.addCell(cantidad);
+                tablaProd.addCell(subtotal);
+            }
+            
+            doc.add(tablaProd);
             
             doc.close();
             archivo.close();
@@ -2382,6 +2460,7 @@ public class Sistema extends javax.swing.JFrame {
             registrarVenta();
             registrarDetalleVenta();
             actualizarStock();
+            pdfVenta();
             limpiarTabla();
             limpiarTablaVentas();
             listarProductosParaVenta();
