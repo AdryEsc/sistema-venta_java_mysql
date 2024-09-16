@@ -2,11 +2,13 @@
 package Vista;
 
 import Entidad.Cliente;
+import Entidad.Empresa;
 import Entidad.Proveedor;
 import Entidad.Producto;
 import Entidad.Venta;
 import Entidad.VentaDetalle;
 import Modelo.ClienteDao;
+import Modelo.EmpresaDao;
 import Modelo.ProveedorDao;
 import Modelo.ProductoDao;
 import Modelo.VentaDao;
@@ -15,6 +17,7 @@ import Reportes.ExportarExcel;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
@@ -23,6 +26,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,6 +54,8 @@ public class Sistema extends javax.swing.JFrame {
     Venta vta = new Venta();
     VentaDao vtaDao = new VentaDao();
     VentaDetalle vtaDetalle = new VentaDetalle();
+    Empresa emp = new Empresa();
+    EmpresaDao empDao = new EmpresaDao();
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel modelo2 = new DefaultTableModel();
     DefaultTableModel modelo3 = new DefaultTableModel();
@@ -468,7 +474,7 @@ public class Sistema extends javax.swing.JFrame {
             fecha.add(Chunk.NEWLINE);
             Date date = new Date();
             //Calendar fechaActual = Calendar.getInstance();
-            fecha.add("Factura N°: 1" + "\nFecha: " + new SimpleDateFormat("dd-mm-yyyy").format(date) + "\n\n");
+            fecha.add("Factura N°: " + txtIdV.getText() + "\nFecha: " + new SimpleDateFormat("dd-mm-yyyy").format(date) + "\n\n");
             
             PdfPTable encabezado = new PdfPTable(4);
             encabezado.setWidthPercentage(100);
@@ -480,11 +486,13 @@ public class Sistema extends javax.swing.JFrame {
             encabezado.addCell(imagen);
             encabezado.addCell("");
             
-            String cuit = "20336369534";
-            String nombre = "Adrian Escalante";
-            String telefono = "3794673221";
-            String direccion = "Teniente Ibañez y Mendoza";
-            String razonSocial = "Espectro Sistemas";
+            //Obtenemos datos de la empresa
+            emp = empDao.buscarEmpresa();
+            String cuit = String.valueOf(emp.getCuit());
+            String nombre = emp.getNombre();
+            String telefono = String.valueOf(emp.getTelefono());
+            String direccion = emp.getDireccion();
+            String razonSocial = emp.getRazon_social();
             
             encabezado.addCell("Nombre: " + nombre + "\nRazon Social: " + razonSocial + "\nCuit: " + cuit + "\nDirección: " + direccion + "\nTelefono: " + telefono);
             
@@ -495,7 +503,8 @@ public class Sistema extends javax.swing.JFrame {
             //Realizamos la parte que muestra los datos del cliente
             Paragraph cli = new Paragraph();
             cli.add(Chunk.NEWLINE);
-            cli.add("Datos del cliente " + "\n\n");
+            cli.add("Datos del cliente " + "\n");
+            cli.setAlignment(Element.ALIGN_CENTER);
             doc.add(cli);
             
             PdfPTable datosCli = new PdfPTable(4);
@@ -520,10 +529,16 @@ public class Sistema extends javax.swing.JFrame {
             datosCli.addCell(txtNombreClienteVenta.getText());
             datosCli.addCell(txtTelefonoClienteVenta.getText());
             datosCli.addCell(txtDireccionClienteVenta.getText());
-            
+
             doc.add(datosCli);
             
             //Realizamos la parte que muestra los productos vendidos
+            Paragraph detalleVenta = new Paragraph();
+            detalleVenta.add(Chunk.NEWLINE);
+            detalleVenta.add("Datos de la venta " + "\n");
+            detalleVenta.setAlignment(Element.ALIGN_CENTER);
+            doc.add(detalleVenta);
+            
             PdfPTable tablaProd = new PdfPTable(6);
             tablaProd.setWidthPercentage(100);
             tablaProd.getDefaultCell().setBorder(0);
@@ -567,10 +582,25 @@ public class Sistema extends javax.swing.JFrame {
             
             doc.add(tablaProd);
             
+            Paragraph aPagar = new Paragraph();
+            aPagar.add(Chunk.NEWLINE);
+            aPagar.add("Total a pagar: $" + txtTotalPagar.getText());
+            aPagar.setAlignment(Element.ALIGN_RIGHT);
+            doc.add(aPagar);
+            
+            Paragraph saludo = new Paragraph();
+            saludo.add(Chunk.NEWLINE);
+            saludo.add("¡MUCHAS GRACIAS POR SU COMPRA!");
+            saludo.setAlignment(Element.ALIGN_CENTER);
+            doc.add(saludo);
+            
             doc.close();
             archivo.close();
-        }catch(Exception e){
-        
+            
+            //Abrimos el pdf
+            Desktop.getDesktop().open(file);
+        }catch(DocumentException | IOException e){
+            System.out.println(e.toString());
         }
     }
     
