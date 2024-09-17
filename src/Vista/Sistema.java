@@ -3,6 +3,7 @@ package Vista;
 
 import Entidad.Cliente;
 import Entidad.Empresa;
+import Entidad.Eventos;
 import Entidad.Proveedor;
 import Entidad.Producto;
 import Entidad.Venta;
@@ -56,6 +57,7 @@ public class Sistema extends javax.swing.JFrame {
     VentaDetalle vtaDetalle = new VentaDetalle();
     Empresa emp = new Empresa();
     EmpresaDao empDao = new EmpresaDao();
+    Eventos evento = new Eventos();
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel modelo2 = new DefaultTableModel();
     DefaultTableModel modelo3 = new DefaultTableModel();
@@ -461,7 +463,7 @@ public class Sistema extends javax.swing.JFrame {
     private void pdfVenta(){
         try{
             FileOutputStream archivo;
-            File file = new File("src/Pdf/venta.pdf");
+            File file = new File("src/Pdf/venta"+ txtIdV.getText() +".pdf");
             archivo = new FileOutputStream(file);
             Document doc = new Document();
             PdfWriter.getInstance(doc, archivo);
@@ -512,7 +514,7 @@ public class Sistema extends javax.swing.JFrame {
             datosCli.getDefaultCell().setBorder(0);
             float[] columnaCli = new float[]{25f, 50f, 30f, 40f};
             datosCli.setWidths(columnaCli);
-            datosCli.setHorizontalAlignment(Element.ALIGN_LEFT);
+            datosCli.setHorizontalAlignment(Element.ALIGN_CENTER);
             PdfPCell cl1 = new PdfPCell(new Phrase("DNI/CUIT", negrita));
             PdfPCell cl2 = new PdfPCell(new Phrase("Nombre", negrita));
             PdfPCell cl3 = new PdfPCell(new Phrase("Telefono", negrita));
@@ -544,19 +546,21 @@ public class Sistema extends javax.swing.JFrame {
             tablaProd.getDefaultCell().setBorder(0);
             float[] columnaProd = new float[]{20f, 20f, 50f, 20f, 20f, 20f};
             tablaProd.setWidths(columnaProd);
-            tablaProd.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tablaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
             PdfPCell prod1 = new PdfPCell(new Phrase("ID", negrita));
             PdfPCell prod2 = new PdfPCell(new Phrase("Codigo", negrita));
             PdfPCell prod3 = new PdfPCell(new Phrase("Descripción", negrita));
             PdfPCell prod4 = new PdfPCell(new Phrase("Precio", negrita));
             PdfPCell prod5 = new PdfPCell(new Phrase("Cantidad", negrita));
             PdfPCell prod6 = new PdfPCell(new Phrase("Subtotal", negrita));
+            
             prod1.setBorder(0);
             prod2.setBorder(0);
             prod3.setBorder(0);
             prod4.setBorder(0);
             prod5.setBorder(0);
             prod6.setBorder(0);
+            
             tablaProd.addCell(prod1);
             tablaProd.addCell(prod2);
             tablaProd.addCell(prod3);
@@ -584,7 +588,7 @@ public class Sistema extends javax.swing.JFrame {
             
             Paragraph aPagar = new Paragraph();
             aPagar.add(Chunk.NEWLINE);
-            aPagar.add("Total a pagar: $" + txtTotalPagar.getText());
+            aPagar.add("Total a pagar: $ " + String.format("%.2f", Double.parseDouble(txtTotalPagar.getText())));
             aPagar.setAlignment(Element.ALIGN_RIGHT);
             doc.add(aPagar);
             
@@ -829,25 +833,23 @@ public class Sistema extends javax.swing.JFrame {
                 .addGap(0, 3, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addComponent(jButton1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblVendedor)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(34, 34, 34)
+                        .addComponent(jButton1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblVendedor))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblVendedor)
                 .addGap(10, 10, 10)
                 .addComponent(btnNuevaVenta)
@@ -934,9 +936,17 @@ public class Sistema extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtDniCuitVentaKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniCuitVentaKeyTyped(evt);
+            }
         });
 
         txtNombreClienteVenta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtNombreClienteVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreClienteVentaKeyTyped(evt);
+            }
+        });
 
         btnGenerarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/print.png"))); // NOI18N
         btnGenerarVenta.setText("GENERAR VENTA");
@@ -1002,6 +1012,9 @@ public class Sistema extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarProductoPorDescKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarProductoPorDescKeyTyped(evt);
+            }
         });
 
         jLabel43.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -1013,6 +1026,12 @@ public class Sistema extends javax.swing.JFrame {
         btnAgregarProdParaVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarProdParaVentaActionPerformed(evt);
+            }
+        });
+
+        txtTotalPagar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTotalPagarKeyTyped(evt);
             }
         });
 
@@ -2480,6 +2499,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDniCuitVentaKeyPressed
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
+        if(tblVenta.getRowCount() > 0){
         //Verificamos que no haya subtotales en cero en la tabla venta
         boolean verificarSubtotal = verificarPrecioSubtotalCero();
         if(verificarSubtotal == true){
@@ -2499,7 +2519,26 @@ public class Sistema extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Venta realizada con exito", "VENTAS", JOptionPane.PLAIN_MESSAGE);
             }
         }
+        } else{
+            JOptionPane.showMessageDialog(null, "Venta vacia, selecciona los productos a vender", "VENTAS", JOptionPane.PLAIN_MESSAGE);
+        }
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
+
+    private void txtBuscarProductoPorDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProductoPorDescKeyTyped
+        evento.permitirSoloCaracteres(evt);
+    }//GEN-LAST:event_txtBuscarProductoPorDescKeyTyped
+
+    private void txtDniCuitVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniCuitVentaKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtDniCuitVentaKeyTyped
+
+    private void txtNombreClienteVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClienteVentaKeyTyped
+        evento.permitirSoloCaracteres(evt);
+    }//GEN-LAST:event_txtNombreClienteVentaKeyTyped
+
+    private void txtTotalPagarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalPagarKeyTyped
+        evento.permitirSoloDecimales(evt, txtTotalPagar);
+    }//GEN-LAST:event_txtTotalPagarKeyTyped
 
     /**
      * @param args the command line arguments
