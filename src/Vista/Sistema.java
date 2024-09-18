@@ -84,6 +84,7 @@ public class Sistema extends javax.swing.JFrame {
         txtIdCliente.setVisible(false);
         txtIdProveedor.setVisible(false);
         txtIdProducto.setVisible(false);
+        txtIdEmpresa.setVisible(false);
         
         AutoCompleteDecorator.decorate(cmbProveedor);
         prodDao.consultarProveedor(cmbProveedor);
@@ -730,6 +731,7 @@ public class Sistema extends javax.swing.JFrame {
         tblVentas = new javax.swing.JTable();
         btnPdfVentas = new javax.swing.JButton();
         txtIdVenta = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
@@ -745,6 +747,7 @@ public class Sistema extends javax.swing.JFrame {
         txtRazonEmpresa = new javax.swing.JTextField();
         btnActualizarEmpresa = new javax.swing.JButton();
         jLabel36 = new javax.swing.JLabel();
+        txtIdEmpresa = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -800,12 +803,22 @@ public class Sistema extends javax.swing.JFrame {
         btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/compras.png"))); // NOI18N
         btnVentas.setText("VENTAS");
         btnVentas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVentasActionPerformed(evt);
+            }
+        });
 
         btnConfig.setBackground(new java.awt.Color(255, 255, 255));
         btnConfig.setForeground(new java.awt.Color(0, 0, 0));
         btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/config.png"))); // NOI18N
         btnConfig.setText("CONFIG.");
         btnConfig.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfigActionPerformed(evt);
+            }
+        });
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/logo_espectro.png"))); // NOI18N
 
@@ -1172,12 +1185,27 @@ public class Sistema extends javax.swing.JFrame {
         jLabel17.setText("Razon social");
 
         txtDniCuitCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtDniCuitCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniCuitClienteKeyTyped(evt);
+            }
+        });
 
         txtNombreCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtNombreCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreClienteKeyTyped(evt);
+            }
+        });
 
         txtDireccionCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtTelefonoCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtTelefonoCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoClienteKeyTyped(evt);
+            }
+        });
 
         txtCorreoCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -1251,6 +1279,9 @@ public class Sistema extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarClientePorDniKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarClientePorDniKeyTyped(evt);
+            }
         });
 
         jLabel38.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -1260,6 +1291,9 @@ public class Sistema extends javax.swing.JFrame {
         txtBuscarCliente.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarClienteKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarClienteKeyTyped(evt);
             }
         });
 
@@ -1372,6 +1406,11 @@ public class Sistema extends javax.swing.JFrame {
         jLabel18.setText("DNI / CUIT");
 
         txtDniCuitProveedor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtDniCuitProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniCuitProveedorKeyTyped(evt);
+            }
+        });
 
         jLabel19.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel19.setText("Nombre");
@@ -1387,6 +1426,11 @@ public class Sistema extends javax.swing.JFrame {
         jLabel21.setText("Telefono");
 
         txtTelefonoProveedor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtTelefonoProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoProveedorKeyTyped(evt);
+            }
+        });
 
         txtCorreoProveedor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -1466,6 +1510,9 @@ public class Sistema extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarProvPorDniKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarProvPorDniKeyTyped(evt);
+            }
         });
 
         jLabel40.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -1475,6 +1522,9 @@ public class Sistema extends javax.swing.JFrame {
         txtBuscarProvPorNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarProvPorNombreKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarProvPorNombreKeyTyped(evt);
             }
         });
 
@@ -1609,13 +1659,28 @@ public class Sistema extends javax.swing.JFrame {
         jLabel26.setText("Precio costo");
 
         txtPrecioCostoProd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtPrecioCostoProd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioCostoProdKeyTyped(evt);
+            }
+        });
 
         jLabel27.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel27.setText("Precio venta");
 
         txtPrecioVentaProd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtPrecioVentaProd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioVentaProdKeyTyped(evt);
+            }
+        });
 
         txtCantidadProd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtCantidadProd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadProdKeyTyped(evt);
+            }
+        });
 
         jLabel28.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel28.setText("Cantidad");
@@ -1894,6 +1959,19 @@ public class Sistema extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("TODAS LAS VENTAS", jPanel6);
 
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 905, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 503, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("USUARIOS", jPanel8);
+
         jLabel30.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel30.setText("CUIT");
 
@@ -1910,12 +1988,22 @@ public class Sistema extends javax.swing.JFrame {
         jLabel34.setText("Direccion");
 
         txtCuitEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtCuitEmpresa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCuitEmpresaKeyTyped(evt);
+            }
+        });
 
         txtNombreEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtDireccionEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtTelefonoEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtTelefonoEmpresa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoEmpresaKeyTyped(evt);
+            }
+        });
 
         txtCorreoEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -1932,6 +2020,11 @@ public class Sistema extends javax.swing.JFrame {
         btnActualizarEmpresa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarEmpresa.setText("ACTUALIZAR");
         btnActualizarEmpresa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnActualizarEmpresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarEmpresaActionPerformed(evt);
+            }
+        });
 
         jLabel36.setFont(new java.awt.Font("Dubai", 1, 24)); // NOI18N
         jLabel36.setText("DATOS DE LA EMPRESA");
@@ -1982,13 +2075,19 @@ public class Sistema extends javax.swing.JFrame {
                         .addGap(337, 337, 337)
                         .addComponent(btnActualizarEmpresa)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtIdEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addComponent(jLabel36)
-                .addGap(71, 71, 71)
+                .addGap(20, 20, 20)
+                .addComponent(txtIdEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel30)
                     .addComponent(jLabel32)
@@ -2349,7 +2448,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDescripcionProdActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(5);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtTelefonoClienteVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoClienteVentaActionPerformed
@@ -2540,6 +2639,95 @@ public class Sistema extends javax.swing.JFrame {
         evento.permitirSoloDecimales(evt, txtTotalPagar);
     }//GEN-LAST:event_txtTotalPagarKeyTyped
 
+    private void txtDniCuitClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniCuitClienteKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtDniCuitClienteKeyTyped
+
+    private void txtNombreClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClienteKeyTyped
+        evento.permitirSoloCaracteres(evt);
+    }//GEN-LAST:event_txtNombreClienteKeyTyped
+
+    private void txtTelefonoClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoClienteKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtTelefonoClienteKeyTyped
+
+    private void txtBuscarClientePorDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarClientePorDniKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtBuscarClientePorDniKeyTyped
+
+    private void txtBuscarClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarClienteKeyTyped
+        evento.permitirSoloCaracteres(evt);
+    }//GEN-LAST:event_txtBuscarClienteKeyTyped
+
+    private void txtDniCuitProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniCuitProveedorKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtDniCuitProveedorKeyTyped
+
+    private void txtTelefonoProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoProveedorKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtTelefonoProveedorKeyTyped
+
+    private void txtBuscarProvPorDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProvPorDniKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtBuscarProvPorDniKeyTyped
+
+    private void txtBuscarProvPorNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarProvPorNombreKeyTyped
+        evento.permitirSoloCaracteres(evt);
+    }//GEN-LAST:event_txtBuscarProvPorNombreKeyTyped
+
+    private void txtPrecioCostoProdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioCostoProdKeyTyped
+        evento.permitirSoloDecimales(evt, txtPrecioCostoProd);
+    }//GEN-LAST:event_txtPrecioCostoProdKeyTyped
+
+    private void txtPrecioVentaProdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioVentaProdKeyTyped
+        evento.permitirSoloDecimales(evt, txtPrecioVentaProd);
+    }//GEN-LAST:event_txtPrecioVentaProdKeyTyped
+
+    private void txtCantidadProdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadProdKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtCantidadProdKeyTyped
+
+    private void txtCuitEmpresaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuitEmpresaKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtCuitEmpresaKeyTyped
+
+    private void txtTelefonoEmpresaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoEmpresaKeyTyped
+        evento.permitirSoloNumeros(evt);
+    }//GEN-LAST:event_txtTelefonoEmpresaKeyTyped
+
+    private void btnConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigActionPerformed
+        emp = empDao.buscarEmpresa();
+        String idEmpresa = String.valueOf(emp.getId_empresa());
+        txtIdEmpresa.setText(idEmpresa);
+        String cuitEmpresa = String.valueOf(emp.getCuit());
+        txtCuitEmpresa.setText(cuitEmpresa);
+        txtNombreEmpresa.setText(emp.getNombre());
+        txtDireccionEmpresa.setText(emp.getDireccion());
+        String telefonoEmpresa = String.valueOf(emp.getTelefono());
+        txtTelefonoEmpresa.setText(telefonoEmpresa);
+        txtCorreoEmpresa.setText(emp.getCorreo());
+        txtRazonEmpresa.setText(emp.getRazon_social());
+        jTabbedPane1.setSelectedIndex(6);
+    }//GEN-LAST:event_btnConfigActionPerformed
+
+    private void btnActualizarEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEmpresaActionPerformed
+        emp.setCuit(Long.parseLong(txtCuitEmpresa.getText()));  //Convertimos a long
+        emp.setNombre(txtNombreEmpresa.getText());
+        emp.setDireccion(txtDireccionEmpresa.getText());
+        emp.setTelefono(Long.parseLong(txtTelefonoEmpresa.getText()));
+        emp.setCorreo(txtCorreoEmpresa.getText());
+        emp.setRazon_social(txtRazonEmpresa.getText());
+        emp.setId_empresa(Integer.parseInt(txtIdEmpresa.getText())); //le pasamos el id para la consulta
+                
+        empDao.actualizarEmpresa(emp);
+        JOptionPane.showMessageDialog(null, "Datos de la mpresa actualizado con exito");
+        
+    }//GEN-LAST:event_btnActualizarEmpresaActionPerformed
+
+    private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
+        jTabbedPane1.setSelectedIndex(4);
+    }//GEN-LAST:event_btnVentasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2646,6 +2834,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2685,6 +2874,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTextField txtDniCuitProveedor;
     private javax.swing.JTextField txtDniCuitVenta;
     private javax.swing.JTextField txtIdCliente;
+    private javax.swing.JTextField txtIdEmpresa;
     private javax.swing.JTextField txtIdProducto;
     private javax.swing.JTextField txtIdProveedor;
     private javax.swing.JTextField txtIdV;

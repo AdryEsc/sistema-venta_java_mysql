@@ -49,6 +49,36 @@ public class EmpresaDao {
         }
     }
     
+    //Actualiza cliente
+    public boolean actualizarEmpresa(Empresa emp){
+        String consultaSQL = "UPDATE empresa SET cuit = ?, nombre = ?, direccion = ?, telefono = ?, correo = ?, razon_social = ? WHERE id_empresa = ?";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            ps.setLong(1, emp.getCuit());   //pasamos el valor al ? de la consulta
+            ps.setString(2, emp.getNombre());
+            ps.setString(3, emp.getDireccion());
+            ps.setLong(4, emp.getTelefono());
+            ps.setString(5, emp.getCorreo());
+            ps.setString(6, emp.getRazon_social());
+            ps.setInt(7, emp.getId_empresa());   //pasamos el id 
+            
+            ps.execute();
+            
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+    }
+    
     
     public Empresa buscarEmpresa(){
         Empresa emp = new Empresa();
