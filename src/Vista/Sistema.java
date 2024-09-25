@@ -24,6 +24,8 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.log.Level;
+import com.itextpdf.text.log.Logger;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -339,6 +341,24 @@ public class Sistema extends javax.swing.JFrame {
         
         tblProductosVenta.setModel(modelo);
     }
+    
+    public void listarVentas(){
+        List<Venta> listarVenta = vtaDao.listarVentas();    //metodo de ventaDao
+        modelo = (DefaultTableModel) tblVentas.getModel();
+        Object[] obj = new Object[5];
+        
+        for(int i = 0; i < listarVenta.size(); i++){
+            obj[0] = listarVenta.get(i).getId_venta();
+            obj[1] = listarVenta.get(i).getCliente();
+            obj[2] = listarVenta.get(i).getVendedor();
+            obj[3] = listarVenta.get(i).getTotal();
+            obj[4] = new SimpleDateFormat("dd/MM/yyyy").format(listarVenta.get(i).getFecha());
+            
+            modelo.addRow(obj);
+        }
+        
+        tblVentas.setModel(modelo);
+    }
 
     
     //Metodo para limpiar las tablas
@@ -477,7 +497,7 @@ public class Sistema extends javax.swing.JFrame {
             fecha.add(Chunk.NEWLINE);
             Date date = new Date();
             //Calendar fechaActual = Calendar.getInstance();
-            fecha.add("Factura N°: " + txtIdV.getText() + "\nFecha: " + new SimpleDateFormat("dd-mm-yyyy").format(date) + "\n\n");
+            fecha.add("Factura N°: " + txtIdV.getText() + "\nFecha: " + new SimpleDateFormat("dd/MM/yyyy").format(date) + "\n\n");
             
             PdfPTable encabezado = new PdfPTable(4);
             encabezado.setWidthPercentage(100);
@@ -1911,6 +1931,11 @@ public class Sistema extends javax.swing.JFrame {
                 "ID", "CLIENTE", "VENDEDOR", "TOTAL", "FECHA"
             }
         ));
+        tblVentas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblVentasMouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(tblVentas);
         if (tblVentas.getColumnModel().getColumnCount() > 0) {
             tblVentas.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -2124,7 +2149,15 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_txtRazonEmpresaActionPerformed
 
     private void btnPdfVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfVentasActionPerformed
-        // TODO add your handling code here:
+        try{
+            int idVenta = Integer.parseInt(txtIdVenta.getText());
+            File file = new File("src/pdf/venta" + idVenta + ".pdf");
+            Desktop.getDesktop().open(file);
+        }catch(IOException ex){
+            //Logger.getLogger(Sistema.class.getName()).log(Level.INFO, null, ex);
+            System.out.println(ex);
+        }
+        
     }//GEN-LAST:event_btnPdfVentasActionPerformed
 
     private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
@@ -2726,7 +2759,14 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
         jTabbedPane1.setSelectedIndex(4);
+        listarVentas();
     }//GEN-LAST:event_btnVentasActionPerformed
+
+    private void tblVentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVentasMouseClicked
+        int fila = tblVentas.rowAtPoint(evt.getPoint());
+        txtIdVenta.setText(tblVentas.getValueAt(fila, 0).toString());
+        
+    }//GEN-LAST:event_tblVentasMouseClicked
 
     /**
      * @param args the command line arguments

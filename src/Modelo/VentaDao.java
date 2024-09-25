@@ -138,4 +138,41 @@ public class VentaDao {
         }
     }
     
+    //Devuelve lista de productos de la DB
+    public List listarVentas(){
+        List<Venta> listaVenta = new ArrayList();
+        String consultaSQL = "SELECT * FROM ventas";
+        
+        try {
+            conn = conex.getConnection();
+            ps = conn.prepareStatement(consultaSQL);
+            rs = ps.executeQuery();  //devuelve un resultset
+            
+            //recorremos el resultset
+            while(rs.next()){
+                Venta venta = new Venta();
+                
+                //cargamos el objeto producto
+                venta.setId_venta(rs.getInt("id_venta"));
+                venta.setCliente(rs.getString("cliente"));
+                venta.setVendedor(rs.getString("vendedor"));
+                venta.setTotal(rs.getDouble("total"));
+                venta.setFecha(rs.getDate("fecha"));
+                
+                //Agregamos cliente a la lista
+                listaVenta.add(venta);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex){
+                System.out.println(ex.toString());
+            }
+        }
+        return listaVenta;
+    }
+    
 } //Fin clase pricipal
